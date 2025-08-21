@@ -1,0 +1,31 @@
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+
+# Build directories
+dist/
+
+# Composer vendor directory
+vendor/
+
+# IDE specific files
+.idea/
+.vscode/
+
+# Other
+*.swp
+*.swo
+
+press-kit/
+
