@@ -1,246 +1,167 @@
-# SubFox - Modern App Landing Page
+# Modern App Landing Page Template
 
-A beautiful, modern, and professional landing page template built with PHP and Tailwind CSS. Perfect for app developers who want to showcase their mobile applications with a clean, responsive design.
+A professional, ready-to-use landing page template for mobile apps. Built with PHP and Tailwind CSS, this template is designed for developers who want to quickly create a beautiful website for their mobile application.
 
-## 🌟 Features
-
-- **Modern Design**: Clean, professional layout with smooth gradients and beautiful typography
-- **Fully Responsive**: Optimized for desktop, tablet, and mobile devices
-- **Component-Based**: Modular PHP components for easy customization
-- **Tailwind CSS**: Modern utility-first CSS framework
-- **Material Icons**: Beautiful icons from Google Material Design
-- **SEO Optimized**: Proper meta tags and semantic HTML structure
-- **Easy Configuration**: Everything customizable through `config.php`
-
-## 📁 Project Structure
-
-```
-App/
-├── _components/
-│   ├── header.php                    # Sticky header with blurred background
-│   ├── footer.php                    # Footer with links and social media
-│   ├── feature_card_with_icon.php    # Feature cards with Material Icons
-│   ├── feature_card_with_screenshot.php # Feature cards with app screenshots
-│   ├── review_card.php               # User reviews and app store ratings
-│   └── bottom_download_cta.php       # Call-to-action section before footer
-├── assets/
-│   └── images/                       # Place your images here
-├── src/
-│   └── input.css                     # Tailwind CSS source file
-├── dist/
-│   └── output.css                    # Compiled CSS (auto-generated)
-├── config.php                        # Main configuration file
-├── index.php                         # Homepage with all components
-├── faq.php                          # FAQ page with accordion
-├── contact.php                       # Contact page with form
-├── privacy-policy-android.php       # Android privacy policy
-├── privacy-policy-ios.php           # iOS privacy policy
-├── terms-of-use.php                 # Terms of service
-├── tailwind.config.js               # Tailwind configuration
-├── package.json                     # Node.js dependencies
-└── README.md                        # This file
-```
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js and npm installed
-- PHP server (optional, for testing)
-
-### Installation
+## 🚀 Quick Setup (5 Minutes)
 
 1. **Install dependencies**:
    ```bash
    npm install
    ```
 
-2. **Build CSS** (first time):
+2. **Build CSS**:
    ```bash
    npm run build
    ```
 
-3. **Start development** (with auto-rebuild):
-   ```bash
-   npm run build-css
-   ```
+3. **Customize your app** (see below)
 
-4. **Run PHP server** (optional):
+4. **Launch**:
    ```bash
    php -S localhost:8000
    ```
 
-## ⚙️ Configuration
+## 📝 How to Customize for Your App
 
-Everything is configurable through the `config.php` file. Simply update the values to customize your website:
+### Step 1: Update App Information
+Edit `config.php` and update these basic details:
 
-### App Information
 ```php
 $common = [
-    'appName' => "Your App Name",
-    'appTitle' => "Your App Tagline",
-    'appDescription' => "Your app description",
-    'appIcon' => "/assets/images/app_icon.webp",
-    'supportEmail' => "support@yourapp.com",
-    'appStoreUrl' => "https://apps.apple.com/...",
-    'googlePlayUrl' => "https://play.google.com/...",
+    'appName' => "Your App Name",                    // Replace with your app name
+    'appTitle' => "Your app tagline here",           // Main headline
+    'appDescription' => "Describe what your app does", // App description
+    'appIcon' => "/assets/app_icon.webp",            // Your app icon
+    'supportEmail' => "support@yourapp.com",         // Your support email
+    'appStoreUrl' => "https://apps.apple.com/...",   // Your App Store link
+    'googlePlayUrl' => "https://play.google.com/...", // Your Google Play link
+    'screenshotRoundedCorners' => true,              // true = rounded, false = sharp corners
 ];
 ```
 
-### Features with Icons
-```php
-$featuresIcons = [
-    "featuresList" => [
-        [
-            "title" => "Feature Title",
-            "description" => "Feature description",
-            "icon" => "star", // Material Design icon name
-        ],
-    ]
-];
-```
+### Step 2: Add Your App Screenshots
+1. Place your screenshots in the `/assets/` folder
+2. Update the paths in `config.php`:
 
-### Features with Screenshots
 ```php
+// Hero section screenshot
+$home = [
+    "screenshot" => "/assets/your_main_screenshot.png",
+];
+
+// Feature screenshots
 $featuresScreenshots = [
     "featuresList" => [
         [
-            "title" => "Feature Title",
-            "description" => "Feature description",
-            "image" => "/assets/images/feature_1.webp",
+            "title" => "Easy Setup",
+            "description" => "Get started in minutes",
+            "image" => "/assets/feature_1.png",      // Your screenshot here
+        ],
+        [
+            "title" => "Smart Notifications", 
+            "description" => "Never miss important updates",
+            "image" => "/assets/feature_2.png",      // Your screenshot here
+        ],
+        // Add more features...
+    ]
+];
+```
+
+### Step 3: Customize App Features
+Update the features that appear on your homepage:
+
+```php
+// Features with icons (no screenshots needed)
+$featuresIcons = [
+    "featuresList" => [
+        [
+            "title" => "Fast & Reliable",
+            "description" => "Lightning fast performance",
+            "icon" => "speed",                       // Material Design icon name
+        ],
+        [
+            "title" => "Secure",
+            "description" => "Your data is always protected", 
+            "icon" => "security",
         ],
     ]
 ];
 ```
 
-## 🎨 Design Features
+### Step 4: Add Customer Reviews
+```php
+$ratings = [
+    "ratingsList" => [
+        [
+            "title" => "John Smith",
+            "description" => "This app changed how I work!",
+            "rating" => 5,
+            "image" => "/assets/user_1.jpg",         // User photo (optional)
+        ],
+        // Add more reviews...
+    ]
+];
+```
 
-### Color Scheme
-- **Primary**: Blue tones (#2563eb, #1d4ed8)
-- **Secondary**: Green for Android (#16a34a, #15803d)
-- **Accent**: Purple highlights (#7c3aed, #6d28d9)
-- **Neutral**: Gray scales for text and backgrounds
+### Step 5: Update Footer & Contact Info
+```php
+$footer = [
+    'navigation' => [
+        ['title' => 'About', 'link' => '/about'],
+        ['title' => 'Features', 'link' => '/features'],
+        ['title' => 'Support', 'link' => '/contact'],
+    ],
+    'socials' => [
+        ['title' => 'Twitter', 'link' => 'https://twitter.com/yourapp'],
+        ['title' => 'Instagram', 'link' => 'https://instagram.com/yourapp'],
+    ],
+];
+```
 
-### Typography
-- **System Fonts**: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto
-- **Headings**: Bold, modern hierarchy
-- **Body Text**: Readable line height and spacing
+## 🎨 Design Options
 
-### Layout
-- **Maximum Width**: 7xl (1280px) for main content
-- **Responsive Grid**: Automatic adaptation to screen sizes
-- **Spacing**: Consistent padding and margins using Tailwind scale
+### Screenshot Corners
+Set `'screenshotRoundedCorners' => false` in config.php for sharp, modern corners, or `true` for friendly rounded corners.
 
-## 📱 Components
+### Colors
+The template uses a clean blue color scheme that works well for most apps. All colors are customizable through Tailwind CSS classes.
 
-### Header
-- Sticky positioning with backdrop blur
-- App icon and name on the left
-- Download buttons on the right
-- Responsive design
+## 📱 What You Get
 
-### Hero Section
-- Large, attention-grabbing headline
-- App screenshot showcase
-- Prominent CTA buttons
-- Trust indicators (ratings, user count)
+- **Homepage**: Hero section, features, reviews, download CTA
+- **Contact Page**: Contact form and information
+- **FAQ Page**: Expandable questions and answers
+- **Legal Pages**: Privacy policies and terms (required for app stores)
+- **Smart Downloads**: Automatically detects user's device and shows correct download link
 
-### Feature Cards
-- **With Icons**: Perfect for listing app capabilities
-- **With Screenshots**: Great for showing app interface
-- Alternating layout for visual interest
+## 🚀 Going Live
 
-### Reviews Section
-- User testimonials with star ratings
-- App Store and Google Play ratings display
-- Profile pictures with fallback
-
-### Footer
-- App information and description
-- Navigation links
-- Social media links
-- Legal pages links
-
-## 🔧 Customization
-
-### Adding New Pages
-1. Create a new PHP file in the root directory
-2. Include the config file: `require_once 'config.php';`
-3. Use components: `<?php include '_components/header.php'; ?>`
-4. Follow the existing structure for consistency
-
-### Modifying Styles
-1. Edit classes directly in PHP files (recommended)
-2. Or add custom CSS to `src/input.css`
-3. Run `npm run build` to compile changes
-
-### Adding Images
-1. Place images in the `assets/images/` folder
-2. Update paths in `config.php`
-3. Recommended formats: WebP for best performance
-
-## 📄 Legal Pages
-
-The template includes ready-to-use legal pages with custom CSS that mimics Tailwind styling:
-
-- **Privacy Policy (Android)**: Google Play Store compliant
-- **Privacy Policy (iOS)**: App Store compliant with Apple-specific sections
-- **Terms of Service**: Comprehensive terms covering both platforms
-
-These pages are designed to be easily customizable while maintaining professional appearance.
-
-## 🌐 SEO & Performance
-
-- **Meta Tags**: Proper title, description, and social media tags
-- **Semantic HTML**: Proper heading hierarchy and structure
-- **Fast Loading**: Optimized CSS and minimal dependencies
-- **Mobile First**: Responsive design approach
-- **Accessibility**: ARIA labels and keyboard navigation support
-
-## 🔄 Development Workflow
-
-1. **Development Mode**:
-   ```bash
-   npm run build-css
-   ```
-   Watches for changes and rebuilds automatically
-
-2. **Production Build**:
+1. **Build for production**:
    ```bash
    npm run build
    ```
-   Creates minified CSS for deployment
 
-3. **Testing**:
-   ```bash
-   php -S localhost:8000
-   ```
-   Local PHP server for testing
+2. **Upload files** to your web server
 
-## 📋 Browser Support
+3. **Update app store links** in config.php with your real URLs
 
-- **Modern Browsers**: Chrome, Firefox, Safari, Edge (latest versions)
-- **Mobile Browsers**: iOS Safari, Chrome Mobile, Samsung Internet
-- **Fallbacks**: Graceful degradation for older browsers
+4. **Test on mobile** to ensure everything works correctly
 
-## 🤝 Contributing
+## 💡 Tips for Success
 
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+- **Use high-quality screenshots** - they're the most important element
+- **Keep descriptions short** and focused on benefits
+- **Add real customer reviews** - they build trust
+- **Test on mobile devices** - most visitors will be on phones
+- **Update app store ratings** regularly in config.php
 
-## 📝 License
+## 🆘 Need Help?
 
-This project is open source and available under the [MIT License](LICENSE).
-
-## 🆘 Support
-
-For support and questions:
-- **Email**: support@yourapp.com
-- **Issues**: Create an issue on GitHub
-- **Documentation**: Check this README and code comments
+- Check `config.php` - 90% of customization happens there
+- All images go in `/assets/` folder
+- Run `npm run build` after making changes
+- Test with `php -S localhost:8000`
 
 ---
 
-**Built with ❤️ using PHP and Tailwind CSS**
+**Ready to showcase your app? Start customizing config.php! 🚀**

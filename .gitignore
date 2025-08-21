@@ -13,8 +13,7 @@ Thumbs.db
 # Environment variables
 .env
 
-# Build directories
-dist/
+
 
 # Composer vendor directory
 vendor/
