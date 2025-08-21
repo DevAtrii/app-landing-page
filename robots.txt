@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+
+# Disallow admin and private files
+Disallow: /_components/
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /BrowserDetection.php
+Disallow: /config.php
+Disallow: /tailwind.config.js
+Disallow: /package.json
+Disallow: /package-lock.json
+
+# Allow important pages
+Allow: /index.php
+Allow: /faq.php
+Allow: /contact.php
+Allow: /privacy-policy-android.php
+Allow: /privacy-policy-ios.php
+Allow: /terms-of-services.php
+Allow: /download.php
+
+# Allow assets
+Allow: /assets/
+Allow: /dist/
+
+# Sitemap location
+Sitemap: https://subfox.app/sitemap.xml

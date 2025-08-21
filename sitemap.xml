@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <!-- Homepage -->
+    <url>
+        <loc>https://subfox.app/</loc>
+        <lastmod>2025-08-21</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- FAQ Page -->
+    <url>
+        <loc>https://subfox.app/faq.php</loc>
+        <lastmod>2025-08-21</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Contact Page -->
+    <url>
+        <loc>https://subfox.app/contact.php</loc>
+        <lastmod>2025-08-21</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- Privacy Policy Android -->
+    <url>
+        <loc>https://subfox.app/privacy-policy-android.php</loc>
+        <lastmod>2025-08-21</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    
+    <!-- Privacy Policy iOS -->
+    <url>
+        <loc>https://subfox.app/privacy-policy-ios.php</loc>
+        <lastmod>2025-08-21</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    
+    <!-- Terms of Service -->
+    <url>
+        <loc>https://subfox.app/terms-of-services.php</loc>
+        <lastmod>2025-08-21</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    
+    <!-- Download Page -->
+    <url>
+        <loc>https://subfox.app/download.php</loc>
+        <lastmod>2025-08-21</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+</urlset>
