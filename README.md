@@ -1,3 +1,5 @@
+![SCR-20250821-tain](https://github.com/user-attachments/assets/b832addf-285f-44ee-a751-71d78927bcdf)
+
 # Modern App Landing Page Template
 
 A professional, ready-to-use landing page template for mobile apps. Built with PHP and Tailwind CSS, this template is designed for developers who want to quickly create a beautiful website for their mobile application.

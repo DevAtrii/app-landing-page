@@ -217,28 +217,74 @@ $footer = [
 // faqs
 $faqs = [
     "title" => "Frequently Asked Questions",
-    "description" => "SubFox is a subscription management app that helps you track your subscriptions and save money.",
+    "description" => "Find answers to common questions about SubFox and subscription management.",
     "faqsList" => [
         [
-            "title" => "What is SubFox?",
+            "title" => "Getting Started",
             "faqs" => [
                 [
-                    "title" => "How to add a subscription?",
-                    "description" => "SubFox is a subscription management app that helps you track your subscriptions and save money.",
+                    "title" => "What is SubFox?",
+                    "description" => "SubFox is a comprehensive subscription management app that helps you track all your subscriptions, manage payment dates, and save money by avoiding unwanted charges.",
                 ],
                 [
-                    "title" => "How to edit a subscription?",
-                    "description" => "SubFox is a subscription management app that helps you track your subscriptions and save money.",
+                    "title" => "How much does SubFox cost?",
+                    "description" => "SubFox works on freemium model. All features are available at no cost with limited recurring tasks to help you manage your subscriptions effectively.",
+                ],
+                [
+                    "title" => "Which devices does SubFox support?",
+                    "description" => "SubFox is available for iOS devices through the App Store and Android devices through Google Play Store. The app works on phones and tablets.",
                 ]
             ]
         ],
         [
-            "title" => "What is SubFox?",
+            "title" => "Managing Subscriptions",
             "faqs" => [
                 [
-                    "title" => "How to add a subscription?",
-                    "description" => "SubFox is a subscription management app that helps you track your subscriptions and save money.",
+                    "title" => "How do I add a subscription?",
+                    "description" => "Tap the '+' button, select a service from our extensive list or create a custom one, enter your subscription details like cost and billing cycle, and set your payment date.",
                 ],
+                [
+                    "title" => "Can I add custom services not in your list?",
+                    "description" => "Yes! SubFox allows you to create custom services for any subscription. Just tap 'Add Custom Service' and enter the service name, logo, and other details.",
+                ],
+                [
+                    "title" => "How do I edit or cancel a subscription?",
+                    "description" => "Tap on any subscription to view details, then use the edit button to modify information or mark it as cancelled to stop tracking future payments.",
+                ]
+            ]
+        ],
+        [
+            "title" => "Features & Notifications",
+            "faqs" => [
+                [
+                    "title" => "Will I get reminders for upcoming payments?",
+                    "description" => "Yes, SubFox sends push notifications before your subscription payments are due. You can customize when you receive these reminders in the app settings.",
+                ],
+                [
+                    "title" => "Does SubFox work offline?",
+                    "description" => "Yes, SubFox works completely offline. All your subscription data is stored locally on your device, so you can access and manage your subscriptions anytime.",
+                ],
+                [
+                    "title" => "Can I organize subscriptions into categories?",
+                    "description" => "Absolutely! You can categorize your subscriptions into groups like Entertainment, Productivity, Health, etc., to keep them organized and easy to find.",
+                ]
+            ]
+        ],
+        [
+            "title" => "Data & Privacy",
+            "faqs" => [
+                [
+                    "title" => "Is my subscription data secure?",
+                    "description" => "Yes, all your data is stored securely on your device. SubFox doesn't collect or store your personal subscription information on external servers.",
+                ],
+                [
+                    "title" => "Can I export my subscription data?",
+                    "description" => "Currently, SubFox stores all data locally on your device. We're working on adding export features in future updates to help you backup your subscription data.",
+                ],
+                [
+                    "title" => "What happens if I delete the app?",
+                    "description" => "If you delete SubFox, all your subscription data will be lost since it's stored locally. We recommend keeping the app installed or waiting for our upcoming backup feature.",
+                ]
             ]
         ]
     ]
