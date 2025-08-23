@@ -1,0 +1,46 @@
+[
+    {
+        "code": "SUBFOX2025A",
+        "timestamp": "2025-08-23 17:24:25",
+        "ip": "::1",
+        "email": "test@gmail.com",
+        "howDidYouHearAboutUs": "App Store"
+    },
+    {
+        "code": "SUBFOX2025B",
+        "timestamp": "2025-08-23 17:28:08",
+        "ip": "::1",
+        "email": "atrii@gmail.com",
+        "howDidYouHearAboutUs": "App Store"
+    },
+    {
+        "code": "SUBFOX2025C",
+        "timestamp": "2025-08-23 17:28:15",
+        "ip": "::1",
+        "email": "atrii@gmail.com",
+        "howDidYouHearAboutUs": "App Store"
+    },
+    {
+        "code": "SUBFOX2025D",
+        "timestamp": "2025-08-23 17:30:00",
+        "ip": "::1",
+        "email": "hello@gmail.com",
+        "howDidYouHearAboutUs": "App Store"
+    },
+    {
+        "code": "SUBFOX2025E",
+        "timestamp": "2025-08-23 17:30:54",
+        "ip": "::1"
+    },
+    {
+        "code": "SUBFOX2025F",
+        "timestamp": "2025-08-23 17:31:18",
+        "ip": "::1"
+    },
+    {
+        "code": "SUBFOX2025G",
+        "timestamp": "2025-08-23 17:36:10",
+        "ip": "::1",
+        "email": "example@gmail.com"
+    }
+]

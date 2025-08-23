@@ -164,6 +164,11 @@ $footer = [
             "link" => "/assets/press-kit.zip",
             "isExternal" => true,
         ],
+        [
+            "title" => "Claim Reward",
+            "link" => "/claim-reward.php",
+            "isExternal" => false,
+        ]
     ],
     'socials' => [
         [
@@ -288,4 +293,70 @@ $faqs = [
             ]
         ]
     ]
+];
+
+
+
+// current running redeem codes campaign - removed, now handled in claim-reward.php
+$redeemCodesCampaign = [
+    "isActive" => false,
+    "showStats" => true, // Show claimed & available code counts
+    "commitMessage"=>"I agree to rate app on App Store",
+    "nonActiveProps" => [
+        "title" => "Coming Soon",
+        "description" => "We are working on a new giveaway campaign. Stay tuned for updates.",
+    ],
+    "title" => "🚀 SubFox Launch Giveaway",
+    "description" => "Celebrate the launch of SubFox! Get 1 month free premium and help us improve the app.",
+    "messages"=>[
+        "success" => "Congratulations! You've successfully claimed your SubFox premium code. Thank you for supporting our launch!",
+        "noCode" => "All launch giveaway codes have been claimed. Follow us on social media for future giveaways!",
+    ],
+    "formFields" => [
+        "email" => [
+            "label" => "Email Address",
+            "type" => "email",
+            "description" => "We'll send you updates about SubFox and future giveaways.",
+            "required" => true,
+        ],
+    ],
+    "rules" => [
+        "title" => "How to participate",
+        "description" => "Help us spread the word about SubFox and get rewarded!",
+        "rules" => [
+            [
+                "title" => "1. Upvote our launch post",
+                "description" => "Show your support by upvoting our SubFox launch announcement on Reddit, ProductHunt, or social media.",
+            ],
+            [
+                "title" => "2. Give us an honest review",
+                "description" => "Download SubFox and leave a genuine review on the App Store or Google Play. We hope you'll love it enough for 5 stars! ⭐",
+            ],
+            [
+                "title" => "3. Share your feedback",
+                "description" => "Help us improve SubFox by sharing your thoughts, suggestions, or reporting any bugs you encounter.",
+            ],
+        ]
+    ],
+    "guide" => [
+        "title" => "How to redeem your code",
+        "description" => "Follow these simple steps to activate your 1 month free premium subscription.",
+        "steps" => [
+            [
+                "title" => "1. Download SubFox",
+                "description" => "Get SubFox from the App Store or Google Play Store using the download buttons above.",
+            ],
+            [
+                "title" => "2. Enter your redeem code",
+                "description" => "When purchasing premium in the app, look for 'Redeem Code' option and enter your code.",
+            ],
+            [
+                "title" => "3. Enjoy premium features",
+                "description" => "Your premium subscription will be activated for 1 month. Manage unlimited subscriptions and save money!",
+            ],
+        ]
+    ],
+    "buttonText" => "🎁 Claim Launch Reward",
+    "maxClaimLimits" => 1, // Maximum claims per user/device
+    "id" => "subfox_launch_2025" // Unique campaign identifier
 ];
