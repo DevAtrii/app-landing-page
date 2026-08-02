@@ -1,135 +1,88 @@
 <?php
-// Include config for global variables
 require_once 'config.php';
+$preloadLcpImage = $home['screenshot'];
+$heroRounded = $common['screenshotRoundedCorners'] ? 'hero__screenshot--rounded' : 'hero__screenshot--sharp';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php include '_components/meta.php'; ?>
-    <style>
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translate3d(0, 40px, 0);
-            }
-            to {
-                opacity: 1;
-                transform: translate3d(0, 0, 0);
-            }
-        }
-        
-        @keyframes fadeInRight {
-            from {
-                opacity: 0;
-                transform: translate3d(40px, 0, 0);
-            }
-            to {
-                opacity: 1;
-                transform: translate3d(0, 0, 0);
-            }
-        }
-        
-        .animate-fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-        
-        .animate-fade-in-right {
-            animation: fadeInRight 0.8s ease-out forwards;
-        }
-        
-        .animation-delay-300 { animation-delay: 0.3s; }
-        .animation-delay-500 { animation-delay: 0.5s; }
-        .animation-delay-600 { animation-delay: 0.6s; }
-        .animation-delay-700 { animation-delay: 0.7s; }
-        .animation-delay-900 { animation-delay: 0.9s; }
-        
-        /* Enhanced hover shadow */
-        .hover\:shadow-3xl:hover {
-            box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
-        }
-    </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 via-white to-blue-50 min-h-screen font-body">
-    <!-- Header -->
+<body class="page">
     <?php include '_components/header.php'; ?>
     
-    <!-- Hero Section -->
-    <section class="pt-16 pb-20 relative overflow-hidden">
-        <!-- Background Gradient -->
-        <div class="absolute inset-0 bg-gradient-to-br from-blue-100/50 via-white/30 to-blue-100/50"></div>
-        
-        <!-- Animated Blurred Blobs -->
-        <div class="absolute inset-0 overflow-hidden">
-            <div class="absolute top-20 -left-32 w-96 h-96 bg-blue-400/30 rounded-full blur-3xl animate-pulse"></div>
-            <div class="absolute bottom-20 -right-32 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-300/20 rounded-full blur-2xl animate-pulse delay-500"></div>
+    <section class="section section--hero">
+        <div class="hero__decor perf-defer-motion" id="hero-decor">
+            <svg class="hero__blob hero__blob--top animate-pulse" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path fill="currentColor" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,81.3,-46.3C90.8,-33.5,96.8,-18,96.5,-2.9C96.2,12.2,89.6,26.9,80.1,39.6C70.6,52.3,58.2,63,44.2,71.4C30.2,79.8,15.1,85.9,0.3,85.4C-14.5,84.9,-29,77.8,-42.6,69.1C-56.2,60.4,-68.9,50.1,-77.4,37.3C-85.9,24.5,-90.2,9.2,-88.4,-5.4C-86.6,-20,-78.7,-33.9,-68.6,-45.1C-58.5,-56.3,-46.3,-64.8,-33.4,-72.5C-20.5,-80.2,-7.4,-87.1,4.4,-94.9C16.2,-102.7,30.6,-83.6,44.7,-76.4Z" transform="translate(100 100)" />
+            </svg>
+            <svg class="hero__blob hero__blob--bottom animate-pulse animation-delay-2000" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path fill="currentColor" d="M47.7,-57.2C59.4,-47.3,64.8,-29.4,66.8,-11.9C68.8,5.6,67.4,22.7,58.8,36.2C50.2,49.7,34.4,59.6,17.3,64.1C0.2,68.6,-18.2,67.7,-34.5,59.9C-50.8,52.1,-64.9,37.4,-70.7,20.2C-76.5,3,-74,-16.7,-64.1,-31.6C-54.2,-46.5,-36.9,-56.6,-20.5,-61.2C-4.1,-65.8,11.4,-64.9,26.5,-61.5C41.6,-58.1,36,-67.1,47.7,-57.2Z" transform="translate(100 100)" />
+            </svg>
+            <div class="hero__dots">
+                <div class="hero__dot hero__dot--1 animate-bounce"></div>
+                <div class="hero__dot hero__dot--2 animate-bounce animation-delay-300"></div>
+                <div class="hero__dot hero__dot--3 animate-ping animation-delay-700"></div>
+            </div>
         </div>
         
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <!-- Hero Content -->
-                <div class="text-center lg:text-left">
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold font-heading text-gray-900 mb-6 leading-tight animate-fade-in-up opacity-0 animation-delay-300">
-                        <?php echo $home['title']; ?>
-                    </h1>
-                    <p class="text-xl text-gray-600 mb-8 leading-relaxed font-body animate-fade-in-up opacity-0 animation-delay-500">
-                        <?php echo $home['description']; ?>
-                    </p>
-                    
-                    <!-- CTA Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center lg:justify-start mb-8 animate-fade-in-up opacity-0 animation-delay-700">
-                        <?php if ($common['appStoreUrl']): ?>
-                            <a href="<?php echo $common['appStoreUrl']; ?>" 
-                               target="_blank" 
-                               class="block w-48 h-14 hover:scale-110 hover:-translate-y-1 transition-all duration-300 transform shadow-lg hover:shadow-2xl group">
-                                <img src="./assets/app-store-download.svg" alt="Download on the App Store" class="w-full h-full group-hover:brightness-110 transition-all duration-300">
-                            </a>
-                        <?php endif; ?>
-                        
-                        <?php if ($common['googlePlayUrl']): ?>
-                            <a href="<?php echo $common['googlePlayUrl']; ?>" 
-                               target="_blank" 
-                               class="block w-48 h-14 hover:scale-110 hover:-translate-y-1 transition-all duration-300 transform shadow-lg hover:shadow-2xl group">
-                                <img src="./assets/google-play-download.svg" alt="Get it on Google Play" class="w-full h-full group-hover:brightness-110 transition-all duration-300">
-                            </a>
-                        <?php endif; ?>
-                    </div>
-                    
-                 
+        <div class="container hero__grid">
+            <div class="hero__content">
+                <div class="hero__eyebrow animate-fade-in-up">
+                    <span class="hero__eyebrow-dot animate-pulse"></span>
+                    Track every subscription in one place
                 </div>
                 
-                <!-- Hero Image -->
-                <div class="relative animate-fade-in-right opacity-0 animation-delay-600">
-                    <div class="relative mx-auto max-w-sm hover:scale-105 transition-all duration-500 hover:rotate-1">
-                        <?php 
-                        $heroImageCornerClass = $common['screenshotRoundedCorners'] ? 'rounded-3xl' : 'rounded-none';
-                        ?>
-                        <img src="<?php echo $home['screenshot']; ?>" 
-                             alt="<?php echo $common['appName']; ?> Screenshot" 
-                             class="w-full   <?php echo $heroImageCornerClass; ?>   transition-all duration-500">
-                     </div>
-                    
-                    <!-- Floating Elements -->
-                    <div class="absolute top-1/3 -left-8 w-12 h-12 bg-green-400 rounded-full opacity-15 animate-ping delay-500"></div>
-                    <div class="absolute bottom-1/3 -right-8 w-8 h-8 bg-yellow-400 rounded-full opacity-25 animate-bounce delay-700"></div>
+                <h1 class="hero__title animate-fade-in-up animation-delay-300">
+                    <?php echo str_replace("text-blue-600", "text-highlight", $home['title']); ?>
+                </h1>
+                <p class="hero__desc animate-fade-in-up animation-delay-500">
+                    <?php echo $home['description']; ?>
+                </p>
+                
+                <div class="hero__actions animate-fade-in-up animation-delay-700">
+                    <?php if ($common['appStoreUrl']): ?>
+                        <a href="<?php echo $common['appStoreUrl']; ?>" target="_blank" class="store-badge">
+                            <img src="./assets/app-store-download.svg" alt="Download on the App Store">
+                        </a>
+                    <?php endif; ?>
+                    <?php if ($common['googlePlayUrl']): ?>
+                        <a href="<?php echo $common['googlePlayUrl']; ?>" target="_blank" class="store-badge">
+                            <img src="./assets/google-play-download.svg" alt="Get it on Google Play">
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+            
+            <div class="animate-fade-in-right animation-delay-600">
+                <div class="hero__media-wrap">
+                    <div class="hero__media-glow"></div>
+                    <img src="<?php echo $home['screenshot']; ?>" 
+                         alt="<?php echo $common['appName']; ?> Screenshot" 
+                         width="405" height="868"
+                         decoding="async"
+                         fetchpriority="high"
+                         class="hero__screenshot <?php echo $heroRounded; ?>">
                 </div>
             </div>
         </div>
     </section>
     
-    <!-- Feature Cards with Icons -->
-    <?php include '_components/feature_card_with_icon.php'; ?>
+    <div class="content-auto">
+        <?php include '_components/how_it_works.php'; ?>
+        <?php include '_components/feature_card_with_icon.php'; ?>
+        <?php include '_components/feature_card_with_screenshot.php'; ?>
+        <?php include '_components/review_card.php'; ?>
+        <?php include '_components/home_blogs_section.php'; ?>
+        <?php include '_components/bottom_download_cta.php'; ?>
+    </div>
     
-    <!-- Feature Cards with Screenshots -->
-    <?php include '_components/feature_card_with_screenshot.php'; ?>
-    
-    <!-- Reviews Section -->
-    <?php include '_components/review_card.php'; ?>
-    
-    <!-- Bottom CTA -->
-    <?php include '_components/bottom_download_cta.php'; ?>
-    
-    <!-- Footer -->
     <?php include '_components/footer.php'; ?>
+    <script>
+        requestAnimationFrame(function () {
+            var el = document.getElementById('hero-decor');
+            if (el) el.classList.add('motion-ready');
+        });
+    </script>
 </body>
 </html>

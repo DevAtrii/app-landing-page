@@ -25,4 +25,4 @@ Allow: /assets/
 Allow: /dist/
 
 # Sitemap location
-Sitemap: https://subfox.app/sitemap.xml
+Sitemap: https://webinto.app/sitemap.xml

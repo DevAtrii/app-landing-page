@@ -176,147 +176,72 @@ $pageDescription = $redeemCodesCampaign['description'];
 <html lang="en">
 <head>
     <?php include '_components/meta.php'; ?>
-    <style>
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translate3d(0, 40px, 0);
-            }
-            to {
-                opacity: 1;
-                transform: translate3d(0, 0, 0);
-            }
-        }
-        
-        @keyframes bounceIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        .animate-fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-        
-        .success-animation {
-            animation: bounceIn 0.6s ease;
-        }
-        
-        .animation-delay-300 { animation-delay: 0.3s; }
-        .animation-delay-500 { animation-delay: 0.5s; }
-        .animation-delay-700 { animation-delay: 0.7s; }
-        
-        .claim-button {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px 0 rgba(37, 99, 235, 0.4);
-        }
-        
-        .claim-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px 0 rgba(37, 99, 235, 0.6);
-        }
-        
-        .claim-button:active {
-            transform: translateY(0);
-        }
-        
-        .claim-button:disabled {
-            transform: none;
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-    </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 via-white to-blue-50 min-h-screen font-body">
-    <!-- Header -->
+<body class="page">
     <?php include '_components/header.php'; ?>
     
     <?php if (!$redeemCodesCampaign['isActive']): ?>
-        <!-- Campaign Inactive -->
-        <section class="pt-16 pb-20 relative overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-br from-blue-100/50 via-white/30 to-blue-100/50"></div>
-            
-            <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <div class="animate-fade-in-up opacity-0 animation-delay-300">
-                    <div class="text-8xl mb-8">⏰</div>
-                    <h1 class="text-4xl md:text-5xl font-bold font-heading text-gray-900 mb-6">
-                        <?php echo $redeemCodesCampaign['nonActiveProps']['title']; ?>
-                    </h1>
-                    <p class="text-xl text-gray-600 leading-relaxed font-body max-w-2xl mx-auto">
-                        <?php echo $redeemCodesCampaign['nonActiveProps']['description']; ?>
-                    </p>
+        <section class="claim-page">
+            <div class="claim-page__bg"></div>
+            <div class="claim-page__content">
+                <div class="claim-page__header animate-fade-in-up animation-delay-300">
+                    <div class="claim-page__emoji">⏰</div>
+                    <h1 class="claim-page__title"><?php echo $redeemCodesCampaign['nonActiveProps']['title']; ?></h1>
+                    <p class="claim-page__desc"><?php echo $redeemCodesCampaign['nonActiveProps']['description']; ?></p>
                 </div>
             </div>
         </section>
         
     <?php else: ?>
-        <!-- Active Campaign -->
-        <section class="pt-16 pb-20 relative overflow-hidden">
-            <!-- Background Gradient -->
-            <div class="absolute inset-0 bg-gradient-to-br from-blue-100/50 via-white/30 to-blue-100/50"></div>
+        <section class="claim-page">
+            <div class="claim-page__bg"></div>
+            <div class="claim-page__blob claim-page__blob--1 animate-pulse"></div>
+            <div class="claim-page__blob claim-page__blob--2 animate-pulse animation-delay-2000"></div>
             
-            <!-- Animated Blurred Blobs -->
-            <div class="absolute inset-0 overflow-hidden">
-                <div class="absolute top-20 -left-32 w-96 h-96 bg-blue-400/30 rounded-full blur-3xl animate-pulse"></div>
-                <div class="absolute bottom-20 -right-32 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-            </div>
-            
-            <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- Header -->
-                <div class="text-center mb-12 animate-fade-in-up opacity-0 animation-delay-300">
-                    <h1 class="text-4xl md:text-5xl font-bold font-heading text-gray-900 mb-6">
-                        <?php echo $redeemCodesCampaign['title']; ?>
-                    </h1>
-                    <p class="text-xl text-gray-600 leading-relaxed font-body max-w-2xl mx-auto mb-8">
-                        <?php echo $redeemCodesCampaign['description']; ?>
-                    </p>
+            <div class="claim-page__content">
+                <div class="claim-page__header animate-fade-in-up animation-delay-300">
+                    <h1 class="claim-page__title"><?php echo $redeemCodesCampaign['title']; ?></h1>
+                    <p class="claim-page__desc"><?php echo $redeemCodesCampaign['description']; ?></p>
                     
-                    <!-- Stats (Optional) -->
                     <?php if (isset($redeemCodesCampaign['showStats']) && $redeemCodesCampaign['showStats']): ?>
-                    <div class="flex justify-center gap-8">
-                        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50">
-                            <div class="text-3xl font-bold text-blue-600 font-heading"><?php echo $totalAvailable; ?></div>
-                            <div class="text-gray-600 font-body">Available</div>
+                    <div class="claim-stats">
+                        <div class="claim-stat">
+                            <div class="claim-stat__value claim-stat__value--blue"><?php echo $totalAvailable; ?></div>
+                            <div class="claim-stat__label">Available</div>
                         </div>
-                        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50">
-                            <div class="text-3xl font-bold text-green-600 font-heading"><?php echo $totalClaimed; ?></div>
-                            <div class="text-gray-600 font-body">Claimed</div>
+                        <div class="claim-stat">
+                            <div class="claim-stat__value claim-stat__value--green"><?php echo $totalClaimed; ?></div>
+                            <div class="claim-stat__label">Claimed</div>
                         </div>
                     </div>
                     <?php endif; ?>
                 </div>
 
-                <!-- Main Claim Card -->
-                <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-gray-200/50 mb-12 animate-fade-in-up opacity-0 animation-delay-500">
+                <div class="claim-card animate-fade-in-up animation-delay-500">
                     
                     <?php if ($showError): ?>
                         <!-- Error Message -->
-                        <div class="text-center mb-8">
-                            <div class="text-6xl mb-4">❌</div>
-                            <h2 class="text-2xl font-bold text-red-600 mb-4 font-heading">Error</h2>
-                            <p class="text-red-600 font-body"><?php echo $errorMessage; ?></p>
-                            <a href="<?php echo $_SERVER['PHP_SELF']; ?>" class="inline-block mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Try Again</a>
+                        <div class="claim-state">
+                            <div class="claim-state__emoji">❌</div>
+                            <h2 class="claim-state__title claim-state__title--error">Error</h2>
+                            <p class="claim-state__desc" style="color:var(--color-error)"><?php echo $errorMessage; ?></p>
+                            <a href="<?php echo $_SERVER['PHP_SELF']; ?>" class="btn btn--primary">Try Again</a>
                         </div>
                     <?php elseif ($showNoCode): ?>
-                        <!-- No Codes Message -->
-                        <div class="text-center">
-                            <div class="text-8xl mb-6">😔</div>
-                            <h2 class="text-3xl font-bold text-gray-900 mb-4 font-heading">All Gone!</h2>
-                            <p class="text-gray-600 font-body"><?php echo $redeemCodesCampaign['messages']['noCode']; ?></p>
+                        <div class="claim-state">
+                            <div class="claim-state__emoji claim-state__emoji--lg">😔</div>
+                            <h2 class="claim-state__title">All Gone!</h2>
+                            <p class="claim-state__desc"><?php echo $redeemCodesCampaign['messages']['noCode']; ?></p>
                         </div>
                     <?php elseif ($showSuccess): ?>
-                        <!-- Success Message -->
-                        <div class="text-center">
-                            <div class="success-animation">
-                                <div class="text-8xl mb-6">🎉</div>
-                                <h2 class="text-3xl font-bold text-gray-900 mb-4 font-heading">Congratulations!</h2>
-                                <div class="bg-blue-50 rounded-2xl p-6 mb-6 border border-blue-200">
-                                    <p class="text-gray-700 mb-4 font-body"><?php echo $redeemCodesCampaign['messages']['success']; ?></p>
-                                    <div class="bg-white rounded-xl p-4 border border-blue-300 mb-6">
-                                        <p class="text-blue-800 font-mono text-xl font-bold"><?php echo $claimedCode; ?></p>
-                                    </div>
+                        <div class="claim-state success-animation">
+                            <div class="claim-state__emoji claim-state__emoji--lg">🎉</div>
+                            <h2 class="claim-state__title">Congratulations!</h2>
+                            <div class="claim-card--success">
+                                <p class="claim-state__desc"><?php echo $redeemCodesCampaign['messages']['success']; ?></p>
+                                <div class="claim-code">
+                                    <p class="claim-code__text"><?php echo $claimedCode; ?></p>
+                                </div>
                                     
                                     <!-- Download App Section -->
                                     <div class="pt-4 border-t border-blue-200">
@@ -344,33 +269,26 @@ $pageDescription = $redeemCodesCampaign['description'];
                         </div>
                     <?php else: ?>
                         <!-- Already Claimed Message (Hidden by default, shown by JS) -->
-                        <div id="alreadyClaimedMessage" class="hidden text-center">
-                            <div class="text-6xl mb-4">✅</div>
-                            <h2 class="text-2xl font-bold text-green-600 mb-4 font-heading">Already Claimed!</h2>
-                            <p class="text-gray-600 mb-4 font-body">You have already claimed your free month for this campaign.</p>
-                            <div class="bg-green-50 rounded-2xl p-6 border border-green-200">
-                                <p class="text-gray-700 mb-2 font-body">Your redeem code:</p>
-                                <div class="bg-white rounded-xl p-4 border border-green-300 mb-6">
-                                    <p class="text-green-800 font-mono text-xl font-bold" id="existingRedeemCode"></p>
+                        <div id="alreadyClaimedMessage" class="claim-state is-hidden">
+                            <div class="claim-state__emoji">✅</div>
+                            <h2 class="claim-state__title claim-state__title--success">Already Claimed!</h2>
+                            <p class="claim-state__desc">You have already claimed your free month for this campaign.</p>
+                            <div class="claim-card--success">
+                                <p class="claim-state__desc">Your redeem code:</p>
+                                <div class="claim-code">
+                                    <p class="claim-code__text" id="existingRedeemCode"></p>
                                 </div>
-                                
-                                <!-- Download App Section -->
-                                <div class="pt-4 border-t border-green-200">
-                                    <p class="text-gray-700 mb-4 font-body font-medium">Download the app to redeem your code:</p>
-                                    <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+                                <div style="padding-top:1rem;border-top:1px solid #bbf7d0;margin-top:1rem">
+                                    <p class="claim-state__desc">Download the app to redeem your code:</p>
+                                    <div class="hero__actions">
                                         <?php if ($common['appStoreUrl']): ?>
-                                            <a href="<?php echo $common['appStoreUrl']; ?>" 
-                                               target="_blank" 
-                                               class="block w-48 h-14 hover:scale-105 hover:-translate-y-1 transition-all duration-300 transform shadow-lg hover:shadow-2xl group">
-                                                <img src="./assets/app-store-download.svg" alt="Download on the App Store" class="w-full h-full group-hover:brightness-110 transition-all duration-300">
+                                            <a href="<?php echo $common['appStoreUrl']; ?>" target="_blank" class="store-badge">
+                                                <img src="./assets/app-store-download.svg" alt="Download on the App Store">
                                             </a>
                                         <?php endif; ?>
-                                        
                                         <?php if ($common['googlePlayUrl']): ?>
-                                            <a href="<?php echo $common['googlePlayUrl']; ?>" 
-                                               target="_blank" 
-                                               class="block w-48 h-14 hover:scale-105 hover:-translate-y-1 transition-all duration-300 transform shadow-lg hover:shadow-2xl group">
-                                                <img src="./assets/google-play-download.svg" alt="Get it on Google Play" class="w-full h-full group-hover:brightness-110 transition-all duration-300">
+                                            <a href="<?php echo $common['googlePlayUrl']; ?>" target="_blank" class="store-badge">
+                                                <img src="./assets/google-play-download.svg" alt="Get it on Google Play">
                                             </a>
                                         <?php endif; ?>
                                     </div>
@@ -379,21 +297,19 @@ $pageDescription = $redeemCodesCampaign['description'];
                         </div>
 
                         <!-- Max Claims Reached Message (Hidden by default, shown by JS) -->
-                        <div id="maxClaimsMessage" class="hidden text-center">
-                            <div class="text-6xl mb-4">🚫</div>
-                            <h2 class="text-2xl font-bold text-red-600 mb-4 font-heading">Claim Limit Reached</h2>
-                            <p class="text-gray-600 font-body">You have reached the maximum number of claims allowed for this campaign.</p>
+                        <div id="maxClaimsMessage" class="claim-state is-hidden">
+                            <div class="claim-state__emoji">🚫</div>
+                            <h2 class="claim-state__title claim-state__title--error">Claim Limit Reached</h2>
+                            <p class="claim-state__desc">You have reached the maximum number of claims allowed for this campaign.</p>
                         </div>
 
-                        <!-- Claim Form -->
                         <form id="claimForm" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                            <div class="space-y-6 mb-8">
+                            <div class="claim-form">
                                 <?php foreach ($redeemCodesCampaign['formFields'] as $fieldName => $field): ?>
-                                    <div>
-                                        <label class="block text-gray-700 font-medium mb-2 font-body"><?php echo $field['label']; ?></label>
+                                    <div class="form-field">
+                                        <label><?php echo $field['label']; ?></label>
                                         <?php if ($field['type'] === 'select'): ?>
-                                            <select name="<?php echo $fieldName; ?>" <?php echo $field['required'] ? 'required' : ''; ?> 
-                                                    class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 font-body">
+                                            <select name="<?php echo $fieldName; ?>" <?php echo $field['required'] ? 'required' : ''; ?> class="form-select">
                                                 <option value="">Select an option</option>
                                                 <?php foreach ($field['options'] as $option): ?>
                                                     <option value="<?php echo $option; ?>" <?php echo (isset($_POST[$fieldName]) && $_POST[$fieldName] === $option) ? 'selected' : ''; ?>><?php echo $option; ?></option>
@@ -404,14 +320,14 @@ $pageDescription = $redeemCodesCampaign['description'];
                                                    <?php echo $field['required'] ? 'required' : ''; ?>
                                                    value="<?php echo isset($_POST[$fieldName]) ? htmlspecialchars($_POST[$fieldName]) : ''; ?>"
                                                    placeholder="Enter your <?php echo strtolower($field['label']); ?>"
-                                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 font-body">
+                                                   class="form-input">
                                         <?php endif; ?>
-                                        <p class="text-gray-500 text-sm mt-1 font-body"><?php echo $field['description']; ?></p>
+                                        <p style="color:var(--color-gray-500);font-size:0.875rem;margin-top:0.25rem"><?php echo $field['description']; ?></p>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
 
-                            <button type="submit" class="w-full claim-button text-white font-bold py-4 px-8 rounded-xl text-lg font-heading">
+                            <button type="submit" class="btn btn--claim">
                                 <?php echo $redeemCodesCampaign['buttonText']; ?>
                             </button>
                         </form>
@@ -420,44 +336,35 @@ $pageDescription = $redeemCodesCampaign['description'];
 
                 <!-- Guide Section -->
                 <?php if ($showSuccess): ?>
-                <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-gray-200/50 mb-12">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center font-heading"><?php echo $redeemCodesCampaign['guide']['title']; ?></h2>
-                    <p class="text-gray-600 text-center mb-8 font-body"><?php echo $redeemCodesCampaign['guide']['description']; ?></p>
-                    
-                    <div class="grid gap-6">
-                        <?php foreach ($redeemCodesCampaign['guide']['steps'] as $index => $step): ?>
-                            <div class="flex items-start gap-4 bg-blue-50 rounded-2xl p-6 border border-blue-200">
-                                <div class="flex-shrink-0 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold font-heading">
-                                    <?php echo $index + 1; ?>
-                                </div>
-                                <div>
-                                    <h3 class="text-gray-900 font-semibold mb-2 font-heading"><?php echo $step['title']; ?></h3>
-                                    <p class="text-gray-600 font-body"><?php echo $step['description']; ?></p>
-                                </div>
+                <div class="claim-guide">
+                    <h2 class="claim-guide__title"><?php echo $redeemCodesCampaign['guide']['title']; ?></h2>
+                    <p class="claim-guide__desc"><?php echo $redeemCodesCampaign['guide']['description']; ?></p>
+                    <?php foreach ($redeemCodesCampaign['guide']['steps'] as $index => $step): ?>
+                        <div class="claim-step">
+                            <div class="claim-step__num"><?php echo $index + 1; ?></div>
+                            <div>
+                                <h3 style="font-weight:600;margin-bottom:0.5rem"><?php echo $step['title']; ?></h3>
+                                <p style="color:var(--color-gray-600)"><?php echo $step['description']; ?></p>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
                 <?php endif; ?>
 
-                <!-- Rules Section -->
-                <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-gray-200/50 animate-fade-in-up opacity-0 animation-delay-700">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center font-heading"><?php echo $redeemCodesCampaign['rules']['title']; ?></h2>
-                    <p class="text-gray-600 text-center mb-8 font-body"><?php echo $redeemCodesCampaign['rules']['description']; ?></p>
-                    
-                    <div class="grid gap-4">
-                        <?php foreach ($redeemCodesCampaign['rules']['rules'] as $rule): ?>
-                            <div class="flex items-start gap-4 bg-gray-50 rounded-2xl p-6 border border-gray-200">
-                                <div class="flex-shrink-0 text-green-600">
-                                    <span class="material-icons">check_circle</span>
-                                </div>
-                                <div>
-                                    <h3 class="text-gray-900 font-semibold mb-2 font-heading"><?php echo $rule['title']; ?></h3>
-                            
-                                </div>
+                <div class="claim-rules animate-fade-in-up animation-delay-700">
+                    <h2 class="claim-rules__title"><?php echo $redeemCodesCampaign['rules']['title']; ?></h2>
+                    <p class="claim-rules__desc"><?php echo $redeemCodesCampaign['rules']['description']; ?></p>
+                    <?php foreach ($redeemCodesCampaign['rules']['rules'] as $rule): ?>
+                        <div class="claim-rule">
+                            <span class="material-icons">check_circle</span>
+                            <div>
+                                <h3 style="font-weight:600;margin-bottom:0.5rem"><?php echo $rule['title']; ?></h3>
+                                <?php if (!empty($rule['description'])): ?>
+                                    <p style="color:var(--color-gray-600)"><?php echo $rule['description']; ?></p>
+                                <?php endif; ?>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </section>
@@ -537,16 +444,17 @@ $pageDescription = $redeemCodesCampaign['description'];
         }
 
         function showAlreadyClaimedMessage(code) {
-            document.getElementById('alreadyClaimedMessage').classList.remove('hidden');
+            document.getElementById('alreadyClaimedMessage').classList.remove('is-hidden');
             document.getElementById('existingRedeemCode').textContent = code;
         }
 
         function showMaxClaimsMessage() {
-            document.getElementById('maxClaimsMessage').classList.remove('hidden');
+            document.getElementById('maxClaimsMessage').classList.remove('is-hidden');
         }
 
         function hideClaimForm() {
-            document.getElementById('claimForm').classList.add('hidden');
+            const form = document.getElementById('claimForm');
+            if (form) form.classList.add('is-hidden');
         }
 
         function cleanUrlAfterClaim() {

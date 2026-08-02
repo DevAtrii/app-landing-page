@@ -15,8 +15,8 @@ Thumbs.db
 
 
 
-# Composer vendor directory
-vendor/
+# Composer / PHP dependencies (repo root only — not assets/vendor)
+/vendor/
 
 # IDE specific files
 .idea/

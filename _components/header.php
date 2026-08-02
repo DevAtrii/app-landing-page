@@ -1,24 +1,24 @@
 <?php
-// Include config for global variables
 require_once __DIR__ . '/../config.php';
 ?>
 
-<header class="sticky top-0 z-50 backdrop-blur-sm bg-white/80 border-b border-gray-200/50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-            <!-- Left side - App Icon and Name -->
-            <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity duration-200">
-                <img src="<?php echo $common['appIcon']; ?>" alt="<?php echo $common['appName']; ?>" class="w-10 h-10 rounded-xl shadow-sm">
-                <span class="text-xl font-semibold font-heading text-gray-900"><?php echo $common['appName']; ?></span>
+<header class="site-header">
+    <div class="site-header__inner">
+        <div class="site-header__bar">
+            <a href="/" class="site-header__brand"
+               aria-label="<?php echo htmlspecialchars($common['appName']); ?> — Home">
+                <div class="site-header__logo-wrap">
+                    <img src="<?php echo $common['appIcon']; ?>" alt="" width="40" height="40" decoding="async" fetchpriority="low"
+                         class="site-header__logo" role="presentation">
+                </div>
+                <span class="site-header__name"><?php echo htmlspecialchars($common['appName']); ?></span>
             </a>
             
-            <!-- Right side - Download Button -->
-            <div class="flex items-center">
+            <div>
                 <?php if ($common['googlePlayUrl'] || $common['appStoreUrl']): ?>
-                    <a href="/download.php" 
-                       class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm">
-                        <span class="material-icons text-lg mr-2">download</span>
-                        Download
+                    <a href="/download<?php echo $EXTENSION; ?>" class="btn btn--primary">
+                        <span class="material-icons" aria-hidden="true">rocket_launch</span>
+                        <span><span class="site-header__cta-label-short">Download</span><span class="site-header__cta-label-full">Get Started</span></span>
                     </a>
                 <?php endif; ?>
             </div>

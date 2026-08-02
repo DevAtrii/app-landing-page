@@ -1,91 +1,149 @@
 <?php
-// Include config for global variables
 require_once __DIR__ . '/../config.php';
 ?>
 
-<footer class="bg-gray-50 border-t border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <!-- App Info -->
-            <div class="md:col-span-2">
-                <div class="flex items-center space-x-3 mb-4">
-                    <img src="<?php echo $common['appIcon']; ?>" alt="<?php echo $common['appName']; ?>" class="w-10 h-10 rounded-xl">
-                    <span class="text-xl font-semibold font-heading text-gray-900"><?php echo $common['appName']; ?></span>
+<footer class="site-footer">
+    <div class="site-footer__decor">
+        <svg class="site-footer__decor-circle" fill="currentColor" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="50"></circle>
+        </svg>
+        <svg class="site-footer__decor-square" fill="currentColor" viewBox="0 0 100 100">
+            <rect width="100" height="100" rx="20" transform="rotate(45 50 50)"></rect>
+        </svg>
+    </div>
+
+    <div class="container site-footer__inner">
+        <div class="site-footer__grid">
+            <div class="site-footer__brand-col">
+                <div class="site-footer__brand">
+                    <div class="site-footer__brand-icon-wrap">
+                        <img src="<?php echo $common['appIcon']; ?>" alt="<?php echo $common['appName']; ?>" class="site-footer__brand-icon">
+                    </div>
+                    <span class="site-footer__brand-name"><?php echo $common['appName']; ?></span>
                 </div>
-                <p class="text-gray-600 mb-6 max-w-md font-body"><?php echo $footer['description']; ?></p>
+                <p class="site-footer__desc"><?php echo $footer['description']; ?></p>
                 
-                <!-- Download Buttons -->
-                <div class="flex flex-col sm:flex-row gap-3">
+                <div class="site-footer__downloads">
                     <?php if ($common['appStoreUrl']): ?>
-                        <a href="<?php echo $common['appStoreUrl']; ?>" 
-                           target="_blank" 
-                           class="block w-40 h-12 hover:opacity-80 transition-opacity duration-200">
-                            <img src="./assets/app-store-download.svg" alt="Download on the App Store" class="w-full h-full">
+                        <a href="<?php echo $common['appStoreUrl']; ?>" target="_blank" class="store-badge store-badge--md">
+                            <img src="./assets/app-store-download.svg" alt="Download on the App Store">
                         </a>
                     <?php endif; ?>
-                    
                     <?php if ($common['googlePlayUrl']): ?>
-                        <a href="<?php echo $common['googlePlayUrl']; ?>" 
-                           target="_blank" 
-                           class="block w-40 h-12 hover:opacity-80 transition-opacity duration-200">
-                            <img src="./assets/google-play-download.svg" alt="Get it on Google Play" class="w-full h-full">
+                        <a href="<?php echo $common['googlePlayUrl']; ?>" target="_blank" class="store-badge store-badge--md">
+                            <img src="/assets/google-play-download.svg" alt="Get it on Google Play">
                         </a>
                     <?php endif; ?>
                 </div>
             </div>
             
-            <!-- Navigation Links -->
             <div>
-                <h3 class="text-lg font-semibold font-heading text-gray-900 mb-4">Navigation</h3>
-                <ul class="space-y-2">
+                <h3 class="site-footer__col-title">Navigation</h3>
+                <ul class="site-footer__links">
                     <?php foreach ($footer['navigation'] as $nav): ?>
                         <li>
                             <a href="<?php echo $nav['link']; ?>" 
                                <?php echo $nav['isExternal'] ? 'target="_blank" rel="noopener noreferrer"' : ''; ?>
-                               class="text-gray-600 hover:text-blue-600 transition-colors duration-200 flex items-center font-body">
+                               class="site-footer__link">
+                                <span class="site-footer__link-dot"></span>
                                 <?php echo $nav['title']; ?>
                                 <?php if ($nav['isExternal']): ?>
-                                    <span class="material-icons text-sm ml-1">open_in_new</span>
+                                    <span class="material-icons">open_in_new</span>
                                 <?php endif; ?>
                             </a>
                         </li>
                     <?php endforeach; ?>
                 </ul>
             </div>
-            
-            <!-- Social Links -->
+
+            <?php if (!empty($footer['convertLinks'])): ?>
             <div>
-                <h3 class="text-lg font-semibold font-heading text-gray-900 mb-4">Follow Us</h3>
-                <ul class="space-y-2">
+                <h3 class="site-footer__col-title">Convert to App</h3>
+                <ul class="site-footer__links">
+                    <?php foreach ($footer['convertLinks'] as $link): ?>
+                        <li>
+                            <a href="<?php echo $link['link']; ?>" class="site-footer__link">
+                                <span class="site-footer__link-dot"></span>
+                                <?php echo $link['title']; ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <?php endif; ?>
+
+            <?php if (!empty($footer['toolLinks'])): ?>
+            <div>
+                <h3 class="site-footer__col-title">Tools</h3>
+                <ul class="site-footer__links">
+                    <?php foreach ($footer['toolLinks'] as $link): ?>
+                        <li>
+                            <a href="<?php echo $link['link']; ?>" class="site-footer__link">
+                                <span class="site-footer__link-dot"></span>
+                                <?php echo $link['title']; ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <?php endif; ?>
+
+            <div>
+                <h3 class="site-footer__col-title">Follow Us</h3>
+                <ul class="site-footer__links">
                     <?php foreach ($footer['socials'] as $social): ?>
                         <li>
                             <a href="<?php echo $social['link']; ?>" 
-                               target="_blank" 
-                               rel="noopener noreferrer"
-                               class="text-gray-600 hover:text-blue-600 transition-colors duration-200 flex items-center font-body">
+                               target="_blank" rel="noopener noreferrer"
+                               class="site-footer__link site-footer__link--social">
+                                <span class="site-footer__link-dot"></span>
                                 <?php echo $social['title']; ?>
-                                <span class="material-icons text-sm ml-1">open_in_new</span>
+                                <span class="material-icons">open_in_new</span>
                             </a>
                         </li>
                     <?php endforeach; ?>
                 </ul>
             </div>
         </div>
+
+        <?php if (!empty($footer['resourceSections'])): ?>
+        <div class="site-footer__resources">
+            <?php foreach ($footer['resourceSections'] as $section): ?>
+            <div>
+                <h3 class="site-footer__col-title"><?php echo htmlspecialchars($section['title']); ?></h3>
+                <ul class="site-footer__links" style="margin-bottom: 1.5rem;">
+                    <?php foreach ($section['links'] as $link): ?>
+                        <li>
+                            <a href="<?php echo resource_blog_url($link['slug']); ?>" class="site-footer__link">
+                                <span class="site-footer__link-dot"></span>
+                                <?php echo htmlspecialchars($link['title']); ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+                <a href="<?php echo resource_blog_url('', $section['viewAllCategory'] ?? null); ?>" class="btn btn--outline">
+                    View all
+                    <span class="material-icons">arrow_forward</span>
+                </a>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
         
-        <!-- Legal Links -->
-        <div class="border-t border-gray-200 mt-8 pt-8">
-            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                <div class="flex flex-wrap gap-6">
+        <div class="site-footer__legal">
+            <div class="site-footer__legal-inner">
+                <div class="site-footer__legal-links">
                     <?php foreach ($footer['legal'] as $legal): ?>
-                        <a href="<?php echo $legal['link']; ?>" 
-                           class="text-sm text-gray-500 hover:text-blue-600 transition-colors duration-200 font-body">
+                        <a href="<?php echo $legal['link']; ?>" class="site-footer__legal-link">
                             <?php echo $legal['title']; ?>
                         </a>
                     <?php endforeach; ?>
                 </div>
-                <div class="text-center md:text-right">
-                    <p class="text-sm text-gray-500 font-body"><?php echo $footer['copyright']; ?></p>
-                    <p class="text-sm text-gray-400 mt-1 font-body"><?php echo $footer['message']; ?></p>
+                <div class="site-footer__copyright">
+                    <p class="site-footer__copyright-text"><?php echo $footer['copyright']; ?></p>
+                    <p class="site-footer__message">
+                        <?php echo str_replace("❤️", '<span class="site-footer__heart animate-pulse">❤️</span>', $footer['message']); ?>
+                    </p>
                 </div>
             </div>
         </div>

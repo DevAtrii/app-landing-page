@@ -1,11 +1,34 @@
 <?php
 
-// header
+// Local dev toggle — set to false in production (deploy workflow patches this automatically)
+$LOCAL_DEV = true;
+$EXTENSION = $LOCAL_DEV ? ".php" : "";
 
+
+/**
+ * Blog URL helper for footer and other shared components.
+ */
+function resource_blog_url(string $slug = '', ?string $category = null): string
+{
+    global $LOCAL_DEV, $EXTENSION;
+
+    if ($slug !== '') {
+        return $LOCAL_DEV
+            ? '/blogs.php?article=' . rawurlencode($slug)
+            : '/blogs/' . rawurlencode($slug);
+    }
+
+    $url = '/blogs' . $EXTENSION;
+    if ($category !== null && $category !== '') {
+        $url .= '?category=' . rawurlencode($category);
+    }
+
+    return $url;
+}
 
 // index
 $home = [
-    "title" => "Stay on top of your <span class='text-blue-600'>subscriptions</span> effortlessly",
+    "title" => "Stay on top of your <span class='text-highlight'>subscriptions</span> effortlessly",
     "description" => "SubFox is your go-to app for managing subscriptions, helping you keep track and save money.",
     "screenshot" => "/assets/hero.webp",
 ];
@@ -139,6 +162,32 @@ $bottomCta = [
     "description" => "SubFox is a subscription management app that helps you track your subscriptions and save money.",
 ];
 
+// How it works section (homepage)
+$howItWorks = [
+    "badge" => "Simple Process",
+    "title" => "How it works",
+    "description" => "Take control of your subscriptions in three easy steps.",
+    "steps" => [
+        [
+            "title" => "Add Your Subscriptions",
+            "description" => "Pick from popular services or add custom ones with cost and billing cycle.",
+            "icon" => "add_circle",
+            "color" => "brand",
+        ],
+        [
+            "title" => "Track & Organize",
+            "description" => "Set payment reminders, categorize subscriptions, and see everything in one place.",
+            "icon" => "dashboard",
+            "color" => "accent",
+        ],
+        [
+            "title" => "Save Money",
+            "description" => "Spot unused trials, upcoming charges, and cut costs before they hit your card.",
+            "icon" => "savings",
+            "color" => "secondary",
+        ],
+    ],
+];
 
 // footer
 $footer = [
@@ -146,12 +195,17 @@ $footer = [
     'navigation' => [
         [
             "title" => "FAQs",
-            "link" => "/faq.php",
+            "link" => "/faq" . $EXTENSION,
             "isExternal" => false,
         ],
         [
             "title" => "Contact",
-            "link" => "/contact.php",
+            "link" => "/contact" . $EXTENSION,
+            "isExternal" => false,
+        ],
+        [
+            "title" => "Blogs",
+            "link" => "/blogs" . $EXTENSION,
             "isExternal" => false,
         ],
         [
@@ -166,9 +220,23 @@ $footer = [
         ],
         [
             "title" => "Claim Reward",
-            "link" => "/claim-reward.php",
+            "link" => "/claim-reward" . $EXTENSION,
             "isExternal" => false,
         ]
+    ],
+    // Optional: niche landing pages (WordPress-to-App, etc.) — enable when configured
+    'convertLinks' => [],
+    // Optional: standalone tools (JKS certificate, etc.)
+    'toolLinks' => [],
+    // Optional: curated blog links for footer resource sections
+    'resourceSections' => [
+        [
+            'title' => 'Guides',
+            'viewAllCategory' => 'Guides',
+            'links' => [
+                ['title' => 'Track All Your Subscriptions', 'slug' => 'how-to-track-subscriptions'],
+            ],
+        ],
     ],
     'socials' => [
         [
@@ -197,24 +265,21 @@ $footer = [
     "legal" => [
         [
             "title" => "Privacy Policy (Android)",
-            "link" => "/privacy-policy-android.php",
+            "link" => "/privacy-policy-android" . $EXTENSION,
             "isExternal" => false,
         ],
         [
             "title" => "Privacy Policy (iOS)",
-            "link" => "/privacy-policy-ios.php",
+            "link" => "/privacy-policy-ios" . $EXTENSION,
             "isExternal" => false,
         ],
-
         [
             "title" => "Terms of Service",
-            "link" => "/terms-of-services.php",
+            "link" => "/terms-of-services" . $EXTENSION,
             "isExternal" => false,
         ],
-
-
     ],
-    "copyright" => "© 2025 SubFox. All rights reserved.",
+    "copyright" => "© " . date("Y") . " SubFox. All rights reserved.",
     "message" => "Made with ❤️ in Pakistan",
 ];
 

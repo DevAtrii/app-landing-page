@@ -1,0 +1,33 @@
+/* Above-the-fold text only — critical Geist Sans weights (load before deferred faces) */
+/* geist-sans-latin-500-normal */
+@font-face {
+  font-family: 'Geist Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(/assets/vendor/fonts/geist-sans-latin-500-normal.woff2) format('woff2');
+}
+/* geist-sans-latin-700-normal */
+@font-face {
+  font-family: 'Geist Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(/assets/vendor/fonts/geist-sans-latin-700-normal.woff2) format('woff2');
+}
+/* geist-sans-latin-800-normal */
+@font-face {
+  font-family: 'Geist Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 800;
+  src: url(/assets/vendor/fonts/geist-sans-latin-800-normal.woff2) format('woff2');
+}
+/* geist-sans-latin-900-normal */
+@font-face {
+  font-family: 'Geist Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 900;
+  src: url(/assets/vendor/fonts/geist-sans-latin-900-normal.woff2) format('woff2');
+}

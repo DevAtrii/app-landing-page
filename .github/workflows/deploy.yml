@@ -1,0 +1,175 @@
+name: 🚀 Deploy & Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:   # Manual trigger from GitHub Actions UI
+
+jobs:
+  # ─────────────────────────────────────────
+  # JOB 1 — Auto-version & Create GitHub Release
+  # ─────────────────────────────────────────
+  release:
+    name: 📦 Auto-version & Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      new_tag: ${{ steps.version.outputs.new_tag }}
+
+    steps:
+      - name: 🔄 Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔢 Auto-generate next version
+        id: version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Fetch the latest release tag via GitHub API
+          LATEST=$(curl -s \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/latest" \
+            | jq -r '.tag_name // "none"')
+
+          echo "Latest release tag: $LATEST"
+
+          if [ "$LATEST" = "none" ] || [ "$LATEST" = "null" ]; then
+            # No releases yet — start at v1.0.0
+            NEW_TAG="v1.0.0"
+          else
+            # Strip leading 'v', split on '.', bump major version
+            VERSION="${LATEST#v}"
+            MAJOR=$(echo "$VERSION" | cut -d. -f1)
+            NEW_MAJOR=$((MAJOR + 1))
+            NEW_TAG="v${NEW_MAJOR}.0.0"
+          fi
+
+          echo "New tag: $NEW_TAG"
+          echo "new_tag=$NEW_TAG" >> "$GITHUB_OUTPUT"
+
+      - name: 🏷️ Create git tag
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "${{ steps.version.outputs.new_tag }}"
+          git push origin "${{ steps.version.outputs.new_tag }}"
+
+      - name: 🚀 Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.new_tag }}
+          name: "Release ${{ steps.version.outputs.new_tag }}"
+          body: |
+            ## 🚀 What's new in ${{ steps.version.outputs.new_tag }}
+
+            Deployed to production from commit `${{ github.sha }}` by @${{ github.actor }}.
+
+            > See the [commit history](https://github.com/${{ github.repository }}/commits/${{ steps.version.outputs.new_tag }}) for full details.
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ─────────────────────────────────────────
+  # JOB 2 — Deploy to VPS
+  # ─────────────────────────────────────────
+  deploy:
+    name: 🌐 Deploy to VPS
+    runs-on: ubuntu-latest
+    needs: release   # Only deploy after release is created
+
+    steps:
+      - name: 🔄 Checkout source
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: 📥 Install npm dependencies
+        run: npm ci
+
+      - name: 🎨 Sync fonts
+        run: npm run sync-fonts
+
+      # ── Set up SSH key on the runner so rsync can reach the VPS ──
+      - name: 🔑 Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p ${{ secrets.VPS_PORT }} -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      # ── Rsync web files from runner → VPS (no git clone on VPS needed) ──
+      # Included: .php .html .js .css .xml .txt .webp .png .jpg .svg .md .woff2 .ttf (articles/ + assets/vendor)
+      # Excluded: .py  package*.json  node_modules/  .git/  __secrets__/  blogs/ (renamed)
+      - name: 📂 Rsync web files to VPS
+        run: |
+          rsync -avz --checksum \
+            -e "ssh -i ~/.ssh/deploy_key -p ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no" \
+            --include="*/" \
+            --include="*.php" \
+            --include="*.html" \
+            --include="*.js" \
+            --include="*.css" \
+            --include="css/" \
+            --include="*.xml" \
+            --include="*.txt" \
+            --include="*.md" \
+            --include="*.webp" \
+            --include="*.png" \
+            --include="*.jpg" \
+            --include="*.jpeg" \
+            --include="*.svg" \
+            --include="*.ico" \
+            --include="*.woff2" \
+            --include="*.woff" \
+            --include="*.ttf" \
+            --include="*.conf" \
+            --exclude="*.py" \
+            --exclude="package.json" \
+            --exclude="package-lock.json" \
+            --exclude="node_modules/" \
+            --exclude=".git/" \
+            --exclude="__secrets__/" \
+            --exclude="blogs/" \
+            --exclude="*" \
+            ./ \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_WEB_DIR }}/
+
+      # ── Patch config.php on VPS: set LOCAL_DEV = false ──
+      - name: ⚙️ Set LOCAL_DEV = false on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            set -e
+            TAG="${{ needs.release.outputs.new_tag }}"
+            CONFIG_FILE="${{ secrets.VPS_WEB_DIR }}/config.php"
+
+            echo "=============================="
+            echo "  Tag        : $TAG"
+            echo "  Config file: $CONFIG_FILE"
+            echo "=============================="
+
+            if [ -f "$CONFIG_FILE" ]; then
+              sed -i 's/\$LOCAL_DEV\s*=\s*true/\$LOCAL_DEV = false/' "$CONFIG_FILE"
+              echo "✅ LOCAL_DEV set to false"
+            else
+              echo "⚠️  config.php not found — skipping patch"
+            fi
+
+            echo ""
+            echo "🎉 Deployment of $TAG complete!"
+

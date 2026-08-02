@@ -4,17 +4,12 @@
   "description": "App Landing Page",
   "main": "index.js",
   "scripts": {
-    "build-css": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
-    "build": "tailwindcss -i ./src/input.css -o ./dist/output.css --minify"
+    "sync-fonts": "bash scripts/sync-fonts.sh"
   },
-  "keywords": [
-    "app",
-    "landing",
-    "page"
-  ],
+  "keywords": ["app", "landing", "page"],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "tailwindcss": "^3.4.17"
+    "@fontsource/geist-sans": "^5.2.5"
   }
 }
