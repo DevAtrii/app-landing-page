@@ -30,7 +30,7 @@ require_once __DIR__ . '/../config.php';
                         </div>
                         <div>
                             <p class="review-card__name"><?php echo $review['title']; ?></p>
-                            <p class="review-card__meta">Verified User</p>
+                            <p class="review-card__meta"><?php echo htmlspecialchars(t('reviews_verified')); ?></p>
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@ require_once __DIR__ . '/../config.php';
                         <?php endfor; ?>
                     </div>
                     <p class="store-rating-card__score"><?php echo $common['appRatingAppStore']['rating']; ?></p>
-                    <p class="store-rating-card__count"><?php echo number_format($common['appRatingAppStore']['totalReviews']); ?> reviews</p>
+                    <p class="store-rating-card__count"><?php echo number_format($common['appRatingAppStore']['totalReviews']); ?> <?php echo htmlspecialchars(t('store_rating_reviews')); ?></p>
                 </div>
             <?php endif; ?>
             <?php if ($common['appRatingGooglePlay']): ?>
@@ -61,7 +61,7 @@ require_once __DIR__ . '/../config.php';
                         <?php endfor; ?>
                     </div>
                     <p class="store-rating-card__score"><?php echo $common['appRatingGooglePlay']['rating']; ?></p>
-                    <p class="store-rating-card__count"><?php echo number_format($common['appRatingGooglePlay']['totalReviews']); ?> reviews</p>
+                    <p class="store-rating-card__count"><?php echo number_format($common['appRatingGooglePlay']['totalReviews']); ?> <?php echo htmlspecialchars(t('store_rating_reviews')); ?></p>
                 </div>
             <?php endif; ?>
         </div>

@@ -12,6 +12,9 @@ $preloadLcpImage = $preloadLcpImage ?? null;
 <meta name="author" content="<?php echo $common['appName']; ?>">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="<?php echo isset($canonicalUrl) ? $canonicalUrl : 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
+<?php foreach (i18n_hreflang_links() as $alt): ?>
+<link rel="alternate" hreflang="<?php echo htmlspecialchars($alt['hreflang']); ?>" href="<?php echo htmlspecialchars($alt['url']); ?>">
+<?php endforeach; ?>
 
 <meta property="og:title" content="<?php echo isset($pageTitle) ? $pageTitle . ' - ' . $common['appName'] : $common['appName'] . ' - ' . $common['appTitle']; ?>">
 <meta property="og:description" content="<?php echo isset($pageDescription) ? $pageDescription : $common['appDescription']; ?>">

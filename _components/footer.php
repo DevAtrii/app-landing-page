@@ -38,7 +38,7 @@ require_once __DIR__ . '/../config.php';
             </div>
             
             <div>
-                <h3 class="site-footer__col-title">Navigation</h3>
+                <h3 class="site-footer__col-title"><?php echo htmlspecialchars(t('footer_navigation')); ?></h3>
                 <ul class="site-footer__links">
                     <?php foreach ($footer['navigation'] as $nav): ?>
                         <li>
@@ -89,7 +89,7 @@ require_once __DIR__ . '/../config.php';
             <?php endif; ?>
 
             <div>
-                <h3 class="site-footer__col-title">Follow Us</h3>
+                <h3 class="site-footer__col-title"><?php echo htmlspecialchars(t('footer_follow')); ?></h3>
                 <ul class="site-footer__links">
                     <?php foreach ($footer['socials'] as $social): ?>
                         <li>
@@ -122,7 +122,7 @@ require_once __DIR__ . '/../config.php';
                     <?php endforeach; ?>
                 </ul>
                 <a href="<?php echo resource_blog_url('', $section['viewAllCategory'] ?? null); ?>" class="btn btn--outline">
-                    View all
+                    <?php echo htmlspecialchars(t('footer_view_all')); ?>
                     <span class="material-icons">arrow_forward</span>
                 </a>
             </div>
@@ -132,12 +132,15 @@ require_once __DIR__ . '/../config.php';
         
         <div class="site-footer__legal">
             <div class="site-footer__legal-inner">
-                <div class="site-footer__legal-links">
+                <div class="site-footer__legal-start">
+                    <?php include __DIR__ . '/lang_switcher.php'; ?>
+                    <div class="site-footer__legal-links">
                     <?php foreach ($footer['legal'] as $legal): ?>
                         <a href="<?php echo $legal['link']; ?>" class="site-footer__legal-link">
                             <?php echo $legal['title']; ?>
                         </a>
                     <?php endforeach; ?>
+                    </div>
                 </div>
                 <div class="site-footer__copyright">
                     <p class="site-footer__copyright-text"><?php echo $footer['copyright']; ?></p>

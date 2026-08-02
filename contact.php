@@ -2,11 +2,11 @@
 require_once 'config.php';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo htmlspecialchars(i18n_current_locale()); ?>">
 <head>
     <?php 
-    $pageTitle = "Contact Us";
-    $pageDescription = "Get in touch with the " . $common['appName'] . " team";
+    $pageTitle = t('contact_title');
+    $pageDescription = t('contact_subtitle');
     include '_components/meta.php'; 
     ?>
 </head>
@@ -16,8 +16,8 @@ require_once 'config.php';
     <section class="contact-page">
         <div class="container container--wide">
             <div class="section-header">
-                <h1 class="faq-page__title">Contact Us</h1>
-                <p class="faq-page__desc">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+                <h1 class="faq-page__title"><?php echo htmlspecialchars(t('contact_title')); ?></h1>
+                <p class="faq-page__desc"><?php echo htmlspecialchars(t('contact_subtitle')); ?></p>
             </div>
             
             <div class="contact-page__grid">
@@ -59,7 +59,7 @@ require_once 'config.php';
                             <div>
                                 <h3 class="contact-method__title">Support</h3>
                                 <p class="contact-method__desc">Check our FAQ section for quick answers.</p>
-                                <a href="/faq<?php echo $EXTENSION; ?>" class="contact-method__link">Visit FAQ</a>
+                                <a href="<?php echo i18n_locale_url('/faq' . $EXTENSION); ?>" class="contact-method__link">Visit FAQ</a>
                             </div>
                         </div>
                     </div>

@@ -5,10 +5,11 @@ from datetime import datetime
 from typing import List, Optional, Tuple
 import xml.etree.ElementTree as ET
 
-BASE_URL     = "https://yoururl.app"
+BASE_URL = "https://yoururl.app"
 SITEMAP_FILE = "sitemap.xml"
 ARTICLES_DIR = "articles"
-TOOLS_DIR    = "tools"
+TOOLS_DIR = "tools"
+DEFAULT_LOCALE = "en"
 
 # Root .php files to exclude (internals / config)
 EXCLUDE_FILES = {
@@ -18,11 +19,10 @@ EXCLUDE_FILES = {
 }
 
 
-def parse_frontmatter_date(path: str) -> Optional[str]:
-    """Read optional ISO date from YAML frontmatter (date: YYYY-MM-DD)."""
+def read_frontmatter_block(path: str, max_bytes: int = 4096) -> Optional[str]:
     try:
         with open(path, encoding="utf-8") as f:
-            head = f.read(2048)
+            head = f.read(max_bytes)
     except OSError:
         return None
     if not head.startswith("---"):
@@ -30,26 +30,62 @@ def parse_frontmatter_date(path: str) -> Optional[str]:
     end = head.find("\n---", 3)
     if end == -1:
         return None
-    block = head[3:end]
+    return head[3:end]
+
+
+def parse_frontmatter_date(path: str) -> Optional[str]:
+    """Read optional ISO date from YAML frontmatter (date: YYYY-MM-DD)."""
+    block = read_frontmatter_block(path, 2048)
+    if block is None:
+        return None
     m = re.search(r"^date:\s*[\"']?(\d{4}-\d{2}-\d{2})[\"']?\s*$", block, re.MULTILINE)
     return m.group(1) if m else None
 
 
+def parse_frontmatter_publish_after(path: str) -> Optional[str]:
+    """Read optional publish-after date (publish-after: YYYY-MM-DD)."""
+    block = read_frontmatter_block(path)
+    if block is None:
+        return None
+    m = re.search(
+        r"^publish-after:\s*[\"']?(\d{4}-\d{2}-\d{2})[\"']?\s*$",
+        block,
+        re.MULTILINE,
+    )
+    if m:
+        return m.group(1)
+    m = re.search(
+        r"^publish_after:\s*[\"']?(\d{4}-\d{2}-\d{2})[\"']?\s*$",
+        block,
+        re.MULTILINE,
+    )
+    return m.group(1) if m else None
+
+
+def article_is_published(path: str, today: str) -> bool:
+    publish_after = parse_frontmatter_publish_after(path)
+    if publish_after is None:
+        return True
+    return today >= publish_after
+
+
 def parse_frontmatter_replace(path: str) -> Optional[str]:
     """Return a redirect target when the article is a legacy replacement URL."""
-    try:
-        with open(path, encoding="utf-8") as f:
-            head = f.read(4096)
-    except OSError:
+    block = read_frontmatter_block(path)
+    if block is None:
         return None
-    if not head.startswith("---"):
-        return None
-    end = head.find("\n---", 3)
-    if end == -1:
-        return None
-    block = head[3:end]
     m = re.search(r"^replace:\s*[\"']?([^\"'\s]+)[\"']?\s*$", block, re.MULTILINE)
     return m.group(1) if m else None
+
+
+def parse_frontmatter_lang(path: str) -> str:
+    block = read_frontmatter_block(path)
+    if block is None:
+        return DEFAULT_LOCALE
+    m = re.search(r"^lang:\s*[\"']?([a-z]{2}(?:-[a-z]{2})?)\"?\s*$", block, re.MULTILINE | re.IGNORECASE)
+    if not m:
+        return DEFAULT_LOCALE
+    return m.group(1).lower()
 
 
 def discover_tool_urls() -> List[Tuple[str, str, str, str]]:
@@ -96,7 +132,9 @@ def main():
     for url_el in list(root):
         loc_el = next((child for child in url_el if child.tag.endswith("loc")), None)
         loc = (loc_el.text or "") if loc_el is not None else ""
-        if loc in {f"{BASE_URL}/blogs", f"{BASE_URL}/blogs.php"} or loc.startswith(f"{BASE_URL}/blogs/"):
+        if loc in {f"{BASE_URL}/blogs", f"{BASE_URL}/blogs.php"} or loc.startswith(
+            f"{BASE_URL}/blogs/"
+        ):
             root.remove(url_el)
 
     existing_urls = set()
@@ -123,8 +161,14 @@ def main():
     for file in sorted(glob.glob(pattern)):
         if parse_frontmatter_replace(file):
             continue
+        if not article_is_published(file, today):
+            continue
         slug = os.path.splitext(os.path.basename(file))[0]
-        url = f"{BASE_URL}/blogs/{slug}"
+        lang = parse_frontmatter_lang(file)
+        if lang != DEFAULT_LOCALE:
+            url = f"{BASE_URL}/{lang}/blogs/{slug}"
+        else:
+            url = f"{BASE_URL}/blogs/{slug}"
         if url in existing_urls:
             continue
         lastmod = parse_frontmatter_date(file) or today

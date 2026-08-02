@@ -3,7 +3,7 @@
 require_once 'config.php';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo htmlspecialchars(i18n_current_locale()); ?>">
 
 <head>
     <?php

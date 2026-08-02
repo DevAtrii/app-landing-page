@@ -18,6 +18,8 @@
  *   banner      - (bool)   Show mobile download banner on scroll (default: true)
  *   cta         - (bool)   Show bottom download CTA in article (default: true)
  *   replace     - (string) Slug of another article; requests 301 redirect to that post
+ *   publish-after - (string) ISO date YYYY-MM-DD; hidden until that day (excluded from sitemap)
+ *   lang        - (string) Locale code matching config.php locales (e.g. en, es); defaults to defaultLocale
  */
 
 require_once 'config.php';
@@ -34,13 +36,39 @@ $BASE_URL = 'https://' . ($_SERVER['HTTP_HOST'] ?? 'webinto.app');
 function blog_url(string $slug = ''): string
 {
     global $LOCAL_DEV;
+
     if ($slug === '') {
-        // Link to the blog list page
-        return $LOCAL_DEV ? '/blogs.php' : '/blogs';
+        return i18n_locale_url($LOCAL_DEV ? '/blogs.php' : '/blogs');
     }
-    return $LOCAL_DEV
+
+    $url = $LOCAL_DEV
         ? '/blogs.php?article=' . rawurlencode($slug)
         : '/blogs/' . rawurlencode($slug);
+
+    return i18n_locale_url($url);
+}
+
+/** Blog list URL with optional category / pagination query params */
+function blog_list_page_url(int $page = 1, ?string $category = null): string
+{
+    global $LOCAL_DEV;
+
+    $path = $LOCAL_DEV ? '/blogs.php' : '/blogs';
+    $params = [];
+
+    if ($category !== null && $category !== '') {
+        $params['category'] = $category;
+    }
+    if ($page > 1) {
+        $params['page'] = $page;
+    }
+
+    $url = $path;
+    if ($params !== []) {
+        $url .= '?' . http_build_query($params);
+    }
+
+    return i18n_locale_url($url);
 }
 
 // ─── Route Decision ───────────────────────────────────────────────────────────
@@ -49,8 +77,7 @@ $articleSlug = isset($_GET['article']) ? preg_replace('/[^a-zA-Z0-9\-_]/', '', $
 
 if ($articleSlug) {
     // ─── SINGLE ARTICLE VIEW ─────────────────────────────────────────────────
-    $filePath = $BLOGS_DIR . '/' . $articleSlug . '.md';
-    $post = parseBlogFile($filePath);
+    $post = getPublishedBlogPost($BLOGS_DIR, $articleSlug);
 
     if (!$post) {
         http_response_code(404);
@@ -75,7 +102,7 @@ if ($articleSlug) {
     $ogImage = !empty($meta['image']) ? $BASE_URL . $meta['image'] : $BASE_URL . $common['appIcon'];
     ?>
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="<?php echo htmlspecialchars(i18n_current_locale()); ?>">
 
     <head>
         <?php include '_components/meta.php'; ?>
@@ -130,9 +157,9 @@ if ($articleSlug) {
             <div class="container container--blog">
 
                 <nav class="blog-breadcrumb">
-                    <a href="/">Home</a>
+                    <a href="<?php echo i18n_locale_url($LOCAL_DEV ? '/index.php' : '/'); ?>"><?php echo htmlspecialchars(t('blog_home')); ?></a>
                     <span class="material-icons blog-breadcrumb__sep">chevron_right</span>
-                    <a href="<?php echo blog_url(); ?>">Blogs</a>
+                    <a href="<?php echo blog_url(); ?>"><?php echo htmlspecialchars(t('blog_blogs')); ?></a>
                     <span class="material-icons blog-breadcrumb__sep">chevron_right</span>
                     <span class="blog-breadcrumb__current"><?php echo htmlspecialchars($pageTitle); ?></span>
                 </nav>
@@ -194,7 +221,7 @@ if ($articleSlug) {
                 <div class="blog-article__back">
                     <a href="<?php echo blog_url(); ?>" class="blog-article__back-link">
                         <span class="material-icons">arrow_back</span>
-                        Back to all articles
+                        <?php echo htmlspecialchars(t('blog_back')); ?>
                     </a>
                 </div>
             </div>
@@ -264,19 +291,17 @@ if ($articleSlug) {
     $offset = ($currentPage - 1) * $itemsPerPage;
     $pageBlogs = array_slice($allBlogs, $offset, $itemsPerPage);
 
-    $pageTitle = $activeCategory ? htmlspecialchars($activeCategory) . ' Articles' : 'Blog';
-    $pageDescription = 'Read the latest tutorials, guides, and updates from the ' . $common['appName'] . ' team.';
+    $pageTitle = $activeCategory
+        ? sprintf(t('blog_category_page_title'), htmlspecialchars($activeCategory))
+        : t('blog_page_title');
+    $pageDescription = $activeCategory
+        ? sprintf(t('blog_category_page_desc'), htmlspecialchars($activeCategory))
+        : sprintf(t('blog_list_page_desc'), $common['appName']);
     
-    // Build pagination base URL to preserve category query param
-    $paginationBaseUrl = '?';
-    if ($activeCategory) {
-        $paginationBaseUrl .= 'category=' . urlencode($activeCategory) . '&';
-    }
-    
-    $canonicalUrl = $BASE_URL . blog_url() . ($currentPage > 1 ? $paginationBaseUrl . 'page=' . $currentPage : ($activeCategory ? '?category=' . urlencode($activeCategory) : ''));
+    $canonicalUrl = $BASE_URL . blog_list_page_url($currentPage, $activeCategory);
     ?>
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="<?php echo htmlspecialchars(i18n_current_locale()); ?>">
 
     <head>
         <?php include '_components/meta.php'; ?>
@@ -298,19 +323,19 @@ if ($articleSlug) {
         <section class="blog-list-page">
             <div class="container">
                 <div class="section-header section-header--lg">
-                    <span class="section-header__badge"><?php echo $activeCategory ? 'Category' : 'Our blog'; ?></span>
+                    <span class="section-header__badge"><?php echo $activeCategory ? htmlspecialchars(t('blog_category_filter')) : htmlspecialchars(t('blog_our_blog')); ?></span>
                     <h1 class="section-header__title section-header__title--xl">
-                        <?php echo $activeCategory ? htmlspecialchars($activeCategory) : 'Latest articles'; ?>
+                        <?php echo $activeCategory ? htmlspecialchars($activeCategory) : htmlspecialchars(t('blog_latest_articles')); ?>
                     </h1>
                     <p class="section-header__desc section-header__desc--lg">
-                        <?php echo $activeCategory 
-                            ? 'Explore all our articles related to ' . htmlspecialchars($activeCategory) . '.'
-                            : 'Insights, tutorials, and updates from the ' . htmlspecialchars($common['appName']) . ' team.'; ?>
+                        <?php echo $activeCategory
+                            ? sprintf(htmlspecialchars(t('blog_category_page_desc')), htmlspecialchars($activeCategory))
+                            : sprintf(htmlspecialchars(t('blog_list_page_desc')), htmlspecialchars($common['appName'])); ?>
                     </p>
                     <?php if ($activeCategory): ?>
                         <div style="margin-top:1.5rem">
                             <a href="<?php echo blog_url(); ?>" class="blog-article__back-link">
-                                <span class="material-icons">close</span> Clear filter
+                                <span class="material-icons">close</span> <?php echo htmlspecialchars(t('blog_clear_filter')); ?>
                             </a>
                         </div>
                     <?php endif; ?>
@@ -319,7 +344,7 @@ if ($articleSlug) {
                 <?php if (empty($pageBlogs)): ?>
                     <div class="blog-list__empty">
                         <span class="material-icons">article</span>
-                        <p>No articles yet. Check back soon!</p>
+                        <p><?php echo htmlspecialchars(t('blog_empty')); ?></p>
                     </div>
                 <?php else: ?>
                     <div class="blog-list__grid">
@@ -348,7 +373,7 @@ if ($articleSlug) {
                                         <p class="blog-card__excerpt line-clamp-3" style="font-size:0.875rem"><?php echo htmlspecialchars($blog['description']); ?></p>
                                     <?php endif; ?>
                                     <div class="blog-card__link" style="margin-top:1.25rem;font-size:0.875rem">
-                                        Read article <span class="material-icons">arrow_forward</span>
+                                        <?php echo htmlspecialchars(t('blog_read')); ?> <span class="material-icons">arrow_forward</span>
                                     </div>
                                 </div>
                             </a>
@@ -358,8 +383,8 @@ if ($articleSlug) {
                     <?php if ($totalPages > 1): ?>
                         <nav class="blog-pagination" aria-label="Pagination">
                             <?php if ($currentPage > 1): ?>
-                                <a href="<?php echo $paginationBaseUrl; ?>page=<?php echo $currentPage - 1; ?>" class="blog-pagination__btn">
-                                    <span class="material-icons">chevron_left</span> Previous
+                                <a href="<?php echo blog_list_page_url($currentPage - 1, $activeCategory); ?>" class="blog-pagination__btn">
+                                    <span class="material-icons">chevron_left</span> <?php echo htmlspecialchars(t('blog_previous')); ?>
                                 </a>
                             <?php endif; ?>
 
@@ -375,15 +400,15 @@ if ($articleSlug) {
                                 }
                                 $activeClass = $i === $currentPage ? ' blog-pagination__btn--active' : '';
                                 ?>
-                                <a href="<?php echo $paginationBaseUrl; ?>page=<?php echo $i; ?>"
+                                <a href="<?php echo blog_list_page_url($i, $activeCategory); ?>"
                                     class="blog-pagination__btn<?php echo $activeClass; ?>">
                                     <?php echo $i; ?>
                                 </a>
                             <?php endfor; ?>
 
                             <?php if ($currentPage < $totalPages): ?>
-                                <a href="<?php echo $paginationBaseUrl; ?>page=<?php echo $currentPage + 1; ?>" class="blog-pagination__btn">
-                                    Next <span class="material-icons">chevron_right</span>
+                                <a href="<?php echo blog_list_page_url($currentPage + 1, $activeCategory); ?>" class="blog-pagination__btn">
+                                    <?php echo htmlspecialchars(t('blog_next')); ?> <span class="material-icons">chevron_right</span>
                                 </a>
                             <?php endif; ?>
                         </nav>

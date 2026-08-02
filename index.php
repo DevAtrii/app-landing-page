@@ -4,7 +4,7 @@ $preloadLcpImage = $home['screenshot'];
 $heroRounded = $common['screenshotRoundedCorners'] ? 'hero__screenshot--rounded' : 'hero__screenshot--sharp';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo htmlspecialchars(i18n_current_locale()); ?>">
 <head>
     <?php include '_components/meta.php'; ?>
 </head>
@@ -30,7 +30,7 @@ $heroRounded = $common['screenshotRoundedCorners'] ? 'hero__screenshot--rounded'
             <div class="hero__content">
                 <div class="hero__eyebrow animate-fade-in-up">
                     <span class="hero__eyebrow-dot animate-pulse"></span>
-                    Track every subscription in one place
+                    <?php echo htmlspecialchars(t('hero_eyebrow')); ?>
                 </div>
                 
                 <h1 class="hero__title animate-fade-in-up animation-delay-300">

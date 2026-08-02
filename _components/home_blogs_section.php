@@ -16,14 +16,14 @@ if (!empty($recentBlogs)):
 
     <div class="container">
         <div class="section-header section-header--lg">
-            <span class="section-header__badge">Resources</span>
-            <h2 class="section-header__title section-header__title--xl">Latest from our Blog</h2>
-            <p class="section-header__desc section-header__desc--lg">Discover tips, tutorials, and updates to help you get the most out of <?php echo htmlspecialchars($common['appName']); ?>.</p>
+            <span class="section-header__badge"><?php echo htmlspecialchars(t('blog_resources')); ?></span>
+            <h2 class="section-header__title section-header__title--xl"><?php echo htmlspecialchars(t('blog_latest_title')); ?></h2>
+            <p class="section-header__desc section-header__desc--lg"><?php echo sprintf(htmlspecialchars(t('blog_latest_desc')), htmlspecialchars($common['appName'])); ?></p>
         </div>
 
         <div class="home-blogs__grid">
             <?php foreach ($recentBlogs as $blog): ?>
-                <a href="<?php echo $LOCAL_DEV ? '/blogs.php?article=' . rawurlencode($blog['slug']) : '/blogs/' . rawurlencode($blog['slug']); ?>"
+                <a href="<?php echo i18n_locale_url($LOCAL_DEV ? '/blogs.php?article=' . rawurlencode($blog['slug']) : '/blogs/' . rawurlencode($blog['slug'])); ?>"
                    class="blog-card">
                     <div class="blog-card__cover">
                         <span class="material-icons">article</span>
@@ -52,7 +52,7 @@ if (!empty($recentBlogs)):
                             <p class="blog-card__excerpt line-clamp-3"><?php echo htmlspecialchars($blog['description']); ?></p>
                         <?php endif; ?>
                         <div class="blog-card__link">
-                            Read Article
+                            <?php echo htmlspecialchars(t('blog_read_article')); ?>
                             <span class="material-icons">arrow_forward</span>
                         </div>
                     </div>
@@ -61,8 +61,8 @@ if (!empty($recentBlogs)):
         </div>
 
         <div class="home-blogs__footer">
-            <a href="<?php echo $LOCAL_DEV ? '/blogs.php' : '/blogs'; ?>" class="btn btn--outline">
-                View all articles
+            <a href="<?php echo i18n_locale_url($LOCAL_DEV ? '/blogs.php' : '/blogs'); ?>" class="btn btn--outline">
+                <?php echo htmlspecialchars(t('blog_view_all')); ?>
                 <span class="material-icons">arrow_forward</span>
             </a>
         </div>

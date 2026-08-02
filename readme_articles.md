@@ -45,6 +45,8 @@ Supported keys parsed by `_components/markdown_parser.php` and `blogs.php`:
 | `banner` | Optional | Mobile sticky download bar after scroll. **Default: on.** Set `banner: false` to disable. |
 | `cta` | Optional | Bottom in-article download CTA (app icon + Google Play badge → `/download`). **Default: on.** Set `cta: false` to disable. |
 | `replace` | Optional | **Redirect & hide:** 301 redirect this URL to another article slug; excluded from blog list and homepage blog section. See [Legacy redirects](#legacy-redirects). |
+| `publish-after` | Optional | **Scheduled publish:** ISO date `YYYY-MM-DD`. Article stays hidden (404 on direct URL, excluded from blog list and sitemap) until that calendar day in the server timezone. |
+| `lang` | Optional | Locale code matching `config.php` → `$i18n['locales']` (e.g. `en`, `es`). Defaults to `defaultLocale`. Only shown when the visitor has that language active. |
 
 ### Example frontmatter
 
@@ -118,6 +120,42 @@ Effects:
 - Old URL can remain in sitemap or be removed manually; redirect handles traffic
 
 `replace` accepts slug, `slug.md`, or `slug.webp`; only the slug is used.
+
+---
+
+## Scheduled publishing (`publish-after`)
+
+Set a future go-live date to keep a draft out of the site until that day:
+
+```yaml
+---
+title: "Upcoming Feature Guide"
+description: "..."
+date: "2026-08-15"
+publish-after: "2026-08-15"
+---
+```
+
+Effects before `publish-after`:
+
+- Direct URL returns **404**
+- Excluded from blog list, homepage blog section, and sitemap
+
+On or after the date, the article behaves like any other published post.
+
+---
+
+## Article language (`lang`)
+
+When multi-language is enabled in `config.php`, tag each article with its locale:
+
+```yaml
+lang: es
+```
+
+Articles without `lang` use `defaultLocale` (usually `en`). Only articles matching the visitor's active locale appear in listings; others return **404** on direct access.
+
+**URL format:** local dev (`$LOCAL_DEV = true`) uses `?lang=es`. Production uses path prefixes: `/es/blogs/my-slug`, `/es/faq` (default locale stays unprefixed: `/blogs/my-slug`).
 
 ---
 

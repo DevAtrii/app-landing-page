@@ -2,7 +2,7 @@
 require_once 'config.php';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo htmlspecialchars(i18n_current_locale()); ?>">
 <head>
     <?php 
     $pageTitle = "FAQs";
@@ -41,11 +41,11 @@ require_once 'config.php';
             <?php endforeach; ?>
             
             <div class="faq-support">
-                <h3 class="faq-support__title">Still have questions?</h3>
-                <p class="faq-support__desc">Can't find the answer you're looking for? Please chat with our friendly team.</p>
+                <h3 class="faq-support__title"><?php echo htmlspecialchars(t('faq_still_questions')); ?></h3>
+                <p class="faq-support__desc"><?php echo htmlspecialchars(t('faq_chat_team')); ?></p>
                 <a href="mailto:<?php echo $common['supportEmail']; ?>" class="btn btn--primary btn--lg">
                     <span class="material-icons">email</span>
-                    Contact Support
+                    <?php echo htmlspecialchars(t('faq_contact_support')); ?>
                 </a>
             </div>
         </div>
