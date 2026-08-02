@@ -49,3 +49,9 @@ $preloadLcpImage = $preloadLcpImage ?? null;
     <link rel="stylesheet" href="/assets/vendor/fonts/app-fonts-deferred.css">
     <link rel="stylesheet" href="/assets/vendor/fonts/material-icons.css">
 </noscript>
+<?php
+if (!empty($schemaPageType)) {
+    require_once __DIR__ . '/schema.php';
+    schema_render($schemaPageType, $schemaContext ?? []);
+}
+?>

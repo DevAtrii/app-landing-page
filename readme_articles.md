@@ -45,6 +45,8 @@ Supported keys parsed by `_components/markdown_parser.php` and `blogs.php`:
 | `banner` | Optional | Mobile sticky download bar after scroll. **Default: on.** Set `banner: false` to disable. |
 | `cta` | Optional | Bottom in-article download CTA (app icon + Google Play badge → `/download`). **Default: on.** Set `cta: false` to disable. |
 | `replace` | Optional | **Redirect & hide:** 301 redirect this URL to another article slug; excluded from blog list and homepage blog section. See [Legacy redirects](#legacy-redirects). |
+| `author` | Optional | Author slug from `authors/{slug}.php`, or legacy display name. See [Authors](#authors). |
+| `authors` | Optional | Comma-separated author slugs for co-authored posts, e.g. `jane-doe, subfox-team`. |
 | `publish-after` | Optional | **Scheduled publish:** ISO date `YYYY-MM-DD`. Article stays hidden (404 on direct URL, excluded from blog list and sitemap) until that calendar day in the server timezone. |
 | `lang` | Optional | Locale code matching `config.php` → `$i18n['locales']` (e.g. `en`, `es`). Defaults to `defaultLocale`. Only shown when the visitor has that language active. |
 
@@ -142,6 +144,82 @@ Effects before `publish-after`:
 - Excluded from blog list, homepage blog section, and sitemap
 
 On or after the date, the article behaves like any other published post.
+
+---
+
+## Authors
+
+Authors are defined in `authors/{slug}.php` and referenced from article frontmatter.
+
+### Author profile file
+
+Create `authors/jane-doe.php`:
+
+```php
+<?php
+return [
+    'photo' => '/assets/authors/jane-doe.webp',
+    'social' => [
+        'linkedin' => 'https://linkedin.com/in/jane-doe',
+        'twitter' => 'https://twitter.com/janedoe',
+    ],
+    'locales' => [
+        'en' => [
+            'name' => 'Jane Doe',
+            'role' => 'Head of Content',
+            'bio' => 'Jane writes practical subscription and productivity guides.',
+        ],
+        'es' => [
+            'name' => 'Jane Doe',
+            'role' => 'Jefa de contenido',
+            'bio' => 'Jane escribe guías prácticas sobre suscripciones y productividad.',
+        ],
+    ],
+];
+```
+
+Add a square WebP photo under `assets/authors/{slug}.webp` (recommended 400×400 or larger).
+
+### Article frontmatter
+
+Single author (slug):
+
+```yaml
+author: jane-doe
+```
+
+Multiple authors:
+
+```yaml
+authors: jane-doe, subfox-team
+```
+
+Legacy plain-text names still work when no matching profile exists:
+
+```yaml
+author: Guest Writer
+```
+
+### Author pages & URLs
+
+| Environment | Directory | Profile |
+|-------------|-----------|---------|
+| Local | `/authors.php` | `/authors.php?author=jane-doe` |
+| Production | `/authors` | `/authors/jane-doe` |
+| Production (Spanish) | `/es/authors` | `/es/authors/jane-doe` |
+
+Each profile page lists published articles by that author in the active locale.
+
+### SEO metadata
+
+Registered authors automatically appear in:
+
+- Article byline (photo + link to profile)
+- `<meta property="article:author">` tags
+- `BlogPosting` JSON-LD (`Person` with name, url, image, jobTitle)
+- Author profile `ProfilePage` + `Person` JSON-LD
+
+Run `python3 sitemap-generator.py` to add `/authors` and `/authors/{slug}` to the sitemap.
 
 ---
 

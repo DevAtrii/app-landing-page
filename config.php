@@ -32,6 +32,49 @@ require $localeFile;
 
 i18n_localize_footer($footer);
 
+// ─── Structured data (JSON-LD) ───────────────────────────────────────────────
+// Set $schemaPageType on each page template (e.g. 'home', 'blog_post', 'faq').
+// Change @type per page below — e.g. SoftwareApplication instead of MobileApplication.
+$schema = [
+    'enabled' => true,
+    'organization' => [
+        // Merged into publisher / Organization nodes
+    ],
+    'pages' => [
+        'home' => [
+            'type' => 'MobileApplication',
+            'properties' => [
+                'applicationCategory' => 'FinanceApplication',
+                'operatingSystem' => 'iOS, Android',
+            ],
+        ],
+        'blog' => [
+            'type' => 'Blog',
+        ],
+        'blog_post' => [
+            'type' => 'BlogPosting',
+        ],
+        'author' => [
+            'type' => 'ProfilePage',
+        ],
+        'author_directory' => [
+            'type' => 'CollectionPage',
+        ],
+        'faq' => [
+            'type' => 'FAQPage',
+        ],
+        'contact' => [
+            'type' => 'ContactPage',
+        ],
+        'legal' => [
+            'type' => 'WebPage',
+        ],
+        'default' => [
+            'type' => 'WebPage',
+        ],
+    ],
+];
+
 /**
  * Blog URL helper for footer and other shared components.
  */
@@ -49,6 +92,58 @@ function resource_blog_url(string $slug = '', ?string $category = null): string
             $url .= '?category=' . rawurlencode($category);
         }
     }
+
+    return i18n_locale_url($url);
+}
+
+function blog_url(string $slug = ''): string
+{
+    global $LOCAL_DEV;
+
+    if ($slug === '') {
+        return i18n_locale_url($LOCAL_DEV ? '/blogs.php' : '/blogs');
+    }
+
+    $url = $LOCAL_DEV
+        ? '/blogs.php?article=' . rawurlencode($slug)
+        : '/blogs/' . rawurlencode($slug);
+
+    return i18n_locale_url($url);
+}
+
+function blog_list_page_url(int $page = 1, ?string $category = null): string
+{
+    global $LOCAL_DEV;
+
+    $path = $LOCAL_DEV ? '/blogs.php' : '/blogs';
+    $params = [];
+
+    if ($category !== null && $category !== '') {
+        $params['category'] = $category;
+    }
+    if ($page > 1) {
+        $params['page'] = $page;
+    }
+
+    $url = $path;
+    if ($params !== []) {
+        $url .= '?' . http_build_query($params);
+    }
+
+    return i18n_locale_url($url);
+}
+
+function author_url(string $slug = ''): string
+{
+    global $LOCAL_DEV;
+
+    if ($slug === '') {
+        return i18n_locale_url($LOCAL_DEV ? '/authors.php' : '/authors');
+    }
+
+    $url = $LOCAL_DEV
+        ? '/authors.php?author=' . rawurlencode($slug)
+        : '/authors/' . rawurlencode($slug);
 
     return i18n_locale_url($url);
 }

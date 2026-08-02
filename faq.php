@@ -1,5 +1,10 @@
 <?php
 require_once 'config.php';
+$schemaPageType = 'faq';
+$schemaContext = [
+    'description' => $faqs['description'],
+    'url' => 'https://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . i18n_locale_url('/faq' . $EXTENSION),
+];
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo htmlspecialchars(i18n_current_locale()); ?>">

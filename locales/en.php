@@ -38,6 +38,12 @@ $ui = [
     'reviews_verified' => 'Verified User',
     'store_rating_reviews' => 'reviews',
     'lang_switcher_label' => 'Language',
+    'author_directory_title' => 'Authors',
+    'author_directory_desc' => 'Meet the people who write guides, tutorials, and updates for our blog.',
+    'author_directory_empty' => 'No author profiles yet.',
+    'author_page_desc' => 'Articles and profile for %s on the %s blog.',
+    'author_articles_title' => 'Articles by this author',
+    'author_articles_empty' => 'No published articles yet.',
 ];
 
 $home = [

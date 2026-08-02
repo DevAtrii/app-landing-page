@@ -56,6 +56,50 @@ $apiBaseUrl = $LOCAL_DEV ? 'http://localhost:8080' : 'https://api.example.com';
 
 Production requires `nginx-rules.conf` for clean URLs. The deploy workflow (`.github/workflows/deploy.yml`) auto-sets `$LOCAL_DEV = false` on the VPS.
 
+## 📊 Structured Data (JSON-LD)
+
+Each page type outputs Schema.org JSON-LD automatically. Configure types in `config.php` → `$schema`.
+
+```php
+$schema = [
+    'enabled' => true,
+    'pages' => [
+        'home' => [
+            'type' => 'MobileApplication',  // or SoftwareApplication, WebApplication
+            'properties' => [
+                'applicationCategory' => 'FinanceApplication',
+                'operatingSystem' => 'iOS, Android',
+            ],
+        ],
+        'blog' => ['type' => 'Blog'],
+        'blog_post' => ['type' => 'BlogPosting'],
+        'author' => ['type' => 'ProfilePage'],
+        'author_directory' => ['type' => 'CollectionPage'],
+        'faq' => ['type' => 'FAQPage'],
+        'contact' => ['type' => 'ContactPage'],
+        'legal' => ['type' => 'WebPage'],
+        'default' => ['type' => 'WebPage'],
+    ],
+];
+```
+
+| Page | `$schemaPageType` | Default `@type` | Data source |
+|------|-------------------|-------------------|-------------|
+| Homepage | `home` | `MobileApplication` | `$common`, `$home`, store ratings |
+| Blog list | `blog` | `Blog` | Page title/description |
+| Blog article | `blog_post` | `BlogPosting` | Article meta + authors |
+| Author profile | `author` | `ProfilePage` | Author profile |
+| Author directory | `author_directory` | `CollectionPage` | Directory copy |
+| FAQ | `faq` | `FAQPage` | `$faqs` Q&A list |
+| Contact | `contact` | `ContactPage` | Support email |
+| Legal pages | `legal` | `WebPage` | Page title/description |
+
+Set `'enabled' => false` to disable all JSON-LD output.
+
+Optional extra graphs per page via `'additional' => [['type' => 'Organization', 'properties' => [...]]]`.
+
+Implementation: `_components/schema.php` (rendered from `_components/meta.php` when `$schemaPageType` is set on each template).
+
 ## 🌍 Internationalization (Locales)
 
 Multi-language support is built in. Configure locales in `config.php`; page copy lives in `locales/{code}.php`.

@@ -11,7 +11,8 @@
  * FRONTMATTER KEYS (inside each .md file):
  *   title       - (string) Article headline
  *   description - (string) Meta description & card excerpt
- *   author      - (string) Author display name
+ *   author      - (string) Author slug (authors/{slug}.php) or legacy display name
+ *   authors     - (string) Comma-separated author slugs for co-authored posts
  *   date        - (string) ISO 8601 date, e.g. 2026-04-05
  *   image       - (string) Absolute path to cover image, e.g. /assets/hero.webp
  *   category    - (string) Optional category name, e.g. "Tutorials"
@@ -24,52 +25,10 @@
 
 require_once 'config.php';
 require_once '_components/markdown_parser.php';
+require_once '_components/authors.php';
 
 $BLOGS_DIR = __DIR__ . '/articles';
 $BASE_URL = 'https://' . ($_SERVER['HTTP_HOST'] ?? 'webinto.app');
-
-/**
- * Generate a blog URL that works in both environments:
- *   LOCAL_DEV = true  → /blogs.php?article=slug   (query-based, no nginx needed)
- *   LOCAL_DEV = false → /blogs/slug                (clean URL, nginx rewrite required)
- */
-function blog_url(string $slug = ''): string
-{
-    global $LOCAL_DEV;
-
-    if ($slug === '') {
-        return i18n_locale_url($LOCAL_DEV ? '/blogs.php' : '/blogs');
-    }
-
-    $url = $LOCAL_DEV
-        ? '/blogs.php?article=' . rawurlencode($slug)
-        : '/blogs/' . rawurlencode($slug);
-
-    return i18n_locale_url($url);
-}
-
-/** Blog list URL with optional category / pagination query params */
-function blog_list_page_url(int $page = 1, ?string $category = null): string
-{
-    global $LOCAL_DEV;
-
-    $path = $LOCAL_DEV ? '/blogs.php' : '/blogs';
-    $params = [];
-
-    if ($category !== null && $category !== '') {
-        $params['category'] = $category;
-    }
-    if ($page > 1) {
-        $params['page'] = $page;
-    }
-
-    $url = $path;
-    if ($params !== []) {
-        $url .= '?' . http_build_query($params);
-    }
-
-    return i18n_locale_url($url);
-}
 
 // ─── Route Decision ───────────────────────────────────────────────────────────
 
@@ -96,10 +55,22 @@ if ($articleSlug) {
     }
     $showDownloadBanner = blogBannerEnabled($meta);
     $showArticleCta = blogCtaEnabled($meta);
+    $articleAuthors = blogArticleAuthors($meta);
+    $authorsJsonLd = blogAuthorsJsonLd($articleAuthors, $BASE_URL);
     $pageTitle = $meta['title'] ?? 'Blog Post';
     $pageDescription = $meta['description'] ?? '';
     $canonicalUrl = $BASE_URL . blog_url($articleSlug);
     $ogImage = !empty($meta['image']) ? $BASE_URL . $meta['image'] : $BASE_URL . $common['appIcon'];
+    $schemaPageType = 'blog_post';
+    $schemaContext = [
+        'canonicalUrl' => $canonicalUrl,
+        'title' => $pageTitle,
+        'description' => $pageDescription,
+        'image' => $ogImage,
+        'datePublished' => $meta['date'] ?? '',
+        'dateModified' => $meta['date'] ?? '',
+        'authors' => $authorsJsonLd,
+    ];
     ?>
     <!DOCTYPE html>
     <html lang="<?php echo htmlspecialchars(i18n_current_locale()); ?>">
@@ -111,40 +82,13 @@ if ($articleSlug) {
         <meta property="og:type" content="article">
         <meta property="og:image" content="<?php echo $ogImage; ?>">
         <meta property="article:published_time" content="<?php echo $meta['date'] ?? ''; ?>">
-        <meta property="article:author" content="<?php echo $meta['author'] ?? ''; ?>">
+        <?php foreach ($articleAuthors as $authorMeta): ?>
+        <meta property="article:author" content="<?php echo htmlspecialchars($authorMeta['name']); ?>">
+        <?php endforeach; ?>
 
         <!-- Prism.js for Syntax Highlighting -->
         <link href="/assets/vendor/prism/themes/prism-tomorrow.min.css" rel="stylesheet" />
         <link href="/assets/vendor/prism/plugins/toolbar/prism-toolbar.min.css" rel="stylesheet" />
-        
-        <!-- JSON-LD Structured Data -->
-        <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "BlogPosting",
-          "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "<?php echo $canonicalUrl; ?>"
-          },
-          "headline": <?php echo json_encode($pageTitle); ?>,
-          "description": <?php echo json_encode($pageDescription); ?>,
-          "image": ["<?php echo $ogImage; ?>"],
-          "author": {
-            "@type": "Organization",
-            "name": <?php echo json_encode($meta['author'] ?? $common['appName']); ?>
-          },
-          "publisher": {
-            "@type": "Organization",
-            "name": <?php echo json_encode($common['appName']); ?>,
-            "logo": {
-              "@type": "ImageObject",
-              "url": "<?php echo $BASE_URL . $common['appIcon']; ?>"
-            }
-          },
-          "datePublished": "<?php echo $meta['date'] ?? ''; ?>",
-          "dateModified": "<?php echo $meta['date'] ?? ''; ?>"
-        }
-        </script>
     </head>
 
     <body class="page page--alt">
@@ -174,11 +118,10 @@ if ($articleSlug) {
                     <?php endif; ?>
                     <h1 class="blog-article__title"><?php echo htmlspecialchars($pageTitle); ?></h1>
                     <div class="blog-article__meta">
-                        <?php if (!empty($meta['author'])): ?>
-                            <span class="blog-article__meta-item">
-                                <span class="material-icons">person</span>
-                                <?php echo htmlspecialchars($meta['author']); ?>
-                            </span>
+                        <?php if (!empty($articleAuthors)): ?>
+                            <div class="blog-article__meta-item blog-article__meta-item--authors">
+                                <?php include '_components/blog_article_authors.php'; ?>
+                            </div>
                         <?php endif; ?>
                         <?php if (!empty($meta['date'])): ?>
                             <span class="blog-article__meta-item">
@@ -299,22 +242,17 @@ if ($articleSlug) {
         : sprintf(t('blog_list_page_desc'), $common['appName']);
     
     $canonicalUrl = $BASE_URL . blog_list_page_url($currentPage, $activeCategory);
+    $schemaPageType = 'blog';
+    $schemaContext = [
+        'url' => $BASE_URL . blog_url(),
+        'description' => $pageDescription,
+    ];
     ?>
     <!DOCTYPE html>
     <html lang="<?php echo htmlspecialchars(i18n_current_locale()); ?>">
 
     <head>
         <?php include '_components/meta.php'; ?>
-        <!-- JSON-LD Blog listing structured data -->
-        <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "Blog",
-          "name": "<?php echo $common['appName']; ?> Blog",
-          "url": "<?php echo $BASE_URL . blog_url(); ?>",
-          "description": "<?php echo $pageDescription; ?>"
-        }
-        </script>
     </head>
 
     <body class="page page--alt">

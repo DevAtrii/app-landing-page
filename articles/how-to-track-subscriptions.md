@@ -1,7 +1,7 @@
 ---
 title: How to Track All Your Subscriptions in One Place
 description: Learn how to organize streaming, software, and trial subscriptions so you never miss a payment or get surprised by renewals again.
-author: SubFox Team
+author: subfox-team
 date: 2026-01-15
 image: /assets/cover/how-to-track-subscriptions.webp
 category: Guides

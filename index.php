@@ -2,6 +2,7 @@
 require_once 'config.php';
 $preloadLcpImage = $home['screenshot'];
 $heroRounded = $common['screenshotRoundedCorners'] ? 'hero__screenshot--rounded' : 'hero__screenshot--sharp';
+$schemaPageType = 'home';
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo htmlspecialchars(i18n_current_locale()); ?>">

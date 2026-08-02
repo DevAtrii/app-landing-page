@@ -9,6 +9,12 @@ require_once 'config.php';
     <?php
     $pageTitle = "Privacy Policy (iOS)";
     $pageDescription = "Privacy Policy for " . $common['appName'] . " iOS App";
+    $schemaPageType = 'legal';
+    $schemaContext = [
+        'title' => $pageTitle,
+        'description' => $pageDescription,
+        'url' => 'https://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . i18n_locale_url('/privacy-policy-ios' . $EXTENSION),
+    ];
     include '_components/meta.php';
     ?>
     <style>

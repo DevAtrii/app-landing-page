@@ -40,6 +40,12 @@ $ui = array_merge($ui, [
     'reviews_verified' => 'Usuario verificado',
     'store_rating_reviews' => 'reseñas',
     'lang_switcher_label' => 'Idioma',
+    'author_directory_title' => 'Autores',
+    'author_directory_desc' => 'Conoce a quienes escriben guías, tutoriales y novedades en nuestro blog.',
+    'author_directory_empty' => 'Aún no hay perfiles de autor.',
+    'author_page_desc' => 'Artículos y perfil de %s en el blog de %s.',
+    'author_articles_title' => 'Artículos de este autor',
+    'author_articles_empty' => 'Aún no hay artículos publicados.',
 ]);
 
 $home['title'] = "Controla tus <span class='text-highlight'>suscripciones</span> sin esfuerzo";

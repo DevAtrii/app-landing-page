@@ -170,6 +170,12 @@ $totalAvailable = count($availableCodes);
 // Set page meta data
 $pageTitle = $redeemCodesCampaign['title'];
 $pageDescription = $redeemCodesCampaign['description'];
+$schemaPageType = 'default';
+$schemaContext = [
+    'title' => $pageTitle,
+    'description' => $pageDescription,
+    'url' => 'https://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . i18n_locale_url('/claim-reward' . $EXTENSION),
+];
 ?>
 
 <!DOCTYPE html>

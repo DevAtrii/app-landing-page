@@ -9,6 +9,12 @@ require_once 'config.php';
     <?php
     $pageTitle = "Privacy Policy (Android)";
     $pageDescription = "Privacy Policy for " . $common['appName'] . " Android App";
+    $schemaPageType = 'legal';
+    $schemaContext = [
+        'title' => $pageTitle,
+        'description' => $pageDescription,
+        'url' => 'https://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . i18n_locale_url('/privacy-policy-android' . $EXTENSION),
+    ];
     include '_components/meta.php';
     ?>
     <style>

@@ -137,6 +137,9 @@ function getAllBlogs(string $blogsDir, ?string $locale = null, bool $includeSche
             continue;
         }
 
+        require_once __DIR__ . '/authors.php';
+        $authorSlugs = blogArticleAuthorSlugs($meta);
+
         $blogs[] = [
             'slug' => $slug,
             'title' => $meta['title'] ?? 'Untitled',
@@ -144,6 +147,7 @@ function getAllBlogs(string $blogsDir, ?string $locale = null, bool $includeSche
             'date' => $meta['date'] ?? '',
             'image' => $meta['image'] ?? '',
             'author' => $meta['author'] ?? '',
+            'author_slugs' => $authorSlugs,
             'category' => $meta['category'] ?? 'General',
             'lang' => blogArticleLang($meta),
             'publish-after' => blogMetaDate($meta, 'publish-after') ?? blogMetaDate($meta, 'publish_after'),

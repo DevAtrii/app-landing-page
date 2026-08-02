@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 BASE_URL = "https://yoururl.app"
 SITEMAP_FILE = "sitemap.xml"
 ARTICLES_DIR = "articles"
+AUTHORS_DIR = "authors"
 TOOLS_DIR = "tools"
 DEFAULT_LOCALE = "en"
 
@@ -16,6 +17,7 @@ EXCLUDE_FILES = {
     "config.php",
     "BrowserDetection.php",
     "blogs.php",
+    "authors.php",
 }
 
 
@@ -117,6 +119,24 @@ def discover_tool_urls() -> List[Tuple[str, str, str, str]]:
     return sorted(entries, key=lambda item: item[0])
 
 
+def discover_author_urls() -> List[Tuple[str, str, str, str]]:
+    entries: List[Tuple[str, str, str, str]] = []
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    entries.append((f"{BASE_URL}/authors", today, "monthly", "0.6"))
+
+    if not os.path.isdir(AUTHORS_DIR):
+        return entries
+
+    for file in sorted(glob.glob(os.path.join(AUTHORS_DIR, "*.php"))):
+        slug = os.path.splitext(os.path.basename(file))[0]
+        if not re.match(r"^[a-z0-9\-_]+$", slug):
+            continue
+        entries.append((f"{BASE_URL}/authors/{slug}", today, "monthly", "0.6"))
+
+    return entries
+
+
 def main():
     ET.register_namespace("", "http://www.sitemaps.org/schemas/sitemap/0.9")
 
@@ -134,6 +154,8 @@ def main():
         loc = (loc_el.text or "") if loc_el is not None else ""
         if loc in {f"{BASE_URL}/blogs", f"{BASE_URL}/blogs.php"} or loc.startswith(
             f"{BASE_URL}/blogs/"
+        ) or loc in {f"{BASE_URL}/authors", f"{BASE_URL}/authors.php"} or loc.startswith(
+            f"{BASE_URL}/authors/"
         ):
             root.remove(url_el)
 
@@ -147,6 +169,7 @@ def main():
 
     # Canonical clean blog index.
     to_add.append((f"{BASE_URL}/blogs", today, "weekly", "0.8"))
+    to_add.extend(discover_author_urls())
 
     # ── 1. Root-level .php pages ──────────────────────────────────────────────
     for file in glob.glob("*.php"):
